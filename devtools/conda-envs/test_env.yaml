@@ -1,9 +1,6 @@
 name: test
 channels:
-
   - conda-forge
-
-  - defaults
 dependencies:
     # Base depends
   - python
@@ -13,4 +10,5 @@ dependencies:
   - pytest
   - pytest-cov
   - codecov
+  - mypy
   - openff-recharge
