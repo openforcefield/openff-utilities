@@ -3,7 +3,7 @@ openff-utilities
 A collection of miscellaneous utility functions used throughout the OpenFF stack
 """
 import sys
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 import versioneer
 
 short_description = __doc__.split("\n")
@@ -21,7 +21,7 @@ except:
 
 setup(
     # Self-descriptive entries which should always be present
-    name='openff',
+    name='openff-utilities',
     author='The Open Force Field Initiative',
     author_email='info@openforcefield.org',
     description=short_description[0],
@@ -34,7 +34,7 @@ setup(
     # Which Python importable modules should be included when your package is installed
     # Handled automatically by setuptools. Use 'exclude' to prevent some specific
     # subpackage(s) from being added, if needed
-    packages=find_packages(),
+    packages=find_namespace_packages(include=['openff.*']),
 
     # Optional include package data to ship with your package
     # Customize MANIFEST.in if the general case does not suit your needs
