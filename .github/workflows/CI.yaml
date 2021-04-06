@@ -33,9 +33,10 @@ jobs:
         activate-environment: test
         mamba-version: "*"
         channels: conda-forge,defaults
-        channel-priority: true
         environment-file: devtools/conda-envs/test_env.yaml
+        auto-update-conda: true
         auto-activate-base: false
+        show-channel-urls: true
 
     - name: Additional info about the build
       shell: bash
