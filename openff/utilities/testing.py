@@ -35,7 +35,7 @@ def has_pkg(pkg_name: str):
     return True
 
 
-def requires_pkg(pkg_name: str, reason: Optional[str] = None):
+def skip_if_missing(pkg_name: str, reason: Optional[str] = None):
     """
     Helper function to generate a pytest.mark.skipif decorator
     for any package. This allows tests to be skipped if some

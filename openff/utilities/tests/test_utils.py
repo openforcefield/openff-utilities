@@ -3,7 +3,7 @@ import os
 import pytest
 
 from openff.utilities.exceptions import MissingOptionalDependency
-from openff.utilities.testing import requires_pkg
+from openff.utilities.testing import skip_if_missing
 from openff.utilities.utils import get_data_file_path, requires_package, temporary_cd
 
 
@@ -24,7 +24,7 @@ def compare_paths(path_1: str, path_2: str) -> bool:
     return os.path.normpath(path_1) == os.path.normpath(path_2)
 
 
-@requires_pkg("openff.recharge", reason="Needs a library to look in")
+@skip_if_missing("openff.recharge", reason="Needs a library to look in")
 def test_get_data_file_path():
     """Tests that the `get_data_file_path` can correctly find
     data files.
