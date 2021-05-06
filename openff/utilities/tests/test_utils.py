@@ -4,7 +4,13 @@ import pytest
 
 from openff.utilities.exceptions import MissingOptionalDependency
 from openff.utilities.testing import skip_if_missing
-from openff.utilities.utils import get_data_file_path, requires_package, temporary_cd
+from openff.utilities.utils import (
+    get_data_file_path,
+    has_executable,
+    has_pkg,
+    requires_package,
+    temporary_cd,
+)
 
 
 def compare_paths(path_1: str, path_2: str) -> bool:
@@ -74,6 +80,18 @@ def test_temporary_cd():
         assert compare_paths(os.getcwd(), original_directory)
 
     assert compare_paths(os.getcwd(), original_directory)
+
+
+def test_has_pkg():
+    assert has_pkg("os")
+    assert has_pkg("pytest")
+    assert not has_pkg("nummmmmmpy")
+
+
+def test_has_executable():
+    assert has_executable("pwd")
+    assert has_executable("pytest")
+    assert not has_pkg("pyyyyython")
 
 
 def test_requires_package():

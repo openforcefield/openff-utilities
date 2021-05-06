@@ -1,8 +1,8 @@
-from typing import Optional
+from typing import Iterable, Optional, Union
 
 import pytest
 
-from openff.utilities.utils import has_pkg
+from openff.utilities.utils import has_executable, has_pkg
 
 
 def skip_if_missing(pkg_name: str, reason: Optional[str] = None):
@@ -27,3 +27,20 @@ def skip_if_missing(pkg_name: str, reason: Optional[str] = None):
         reason = f"Package {pkg_name} is required, but was not found."
     requires_pkg = pytest.mark.skipif(not has_pkg(pkg_name), reason=reason)
     return requires_pkg
+
+
+def skip_if_missing_exec(exec: Union[str, Iterable[str]]):
+    """Helper function to generate a pytest.mark.skipif decorator
+    if an executable(s) is not found."""
+    if isinstance(exec, str):
+        execs = [exec]
+    else:
+        execs = exec
+
+    found_exec = False
+    for exec in execs:
+        found_exec = found_exec or has_executable(exec)
+
+    reason = f"Package {str(exec)} is required, but was not found."
+    mark = pytest.mark.skipif(not found_exec, reason=reason)
+    return mark
