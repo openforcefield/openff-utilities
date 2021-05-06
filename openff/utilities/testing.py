@@ -1,38 +1,8 @@
-import importlib
 from typing import Optional
 
 import pytest
 
-
-def has_pkg(pkg_name: str):
-    """
-    Helper function to generically check if a package is installed. Intended
-    to be used to check for optional dependencies.
-
-    Parameters
-    ----------
-    pkg_name : str
-        The name of the package to check the availability of
-
-    Returns
-    -------
-    pkg_available : bool
-        Boolean indicator if the package is available or not
-
-    Examples
-    --------
-    >>> has_numpy = has_pkg('numpy')
-    >>> has_numpy
-    True
-    >>> has_foo = has_pkg('other_non_installed_pkg')
-    >>> has_foo
-    False
-    """
-    try:
-        importlib.import_module(pkg_name)
-    except ModuleNotFoundError:
-        return False
-    return True
+from openff.utilities.utils import has_pkg
 
 
 def skip_if_missing(pkg_name: str, reason: Optional[str] = None):
