@@ -1,4 +1,4 @@
-from openff.utilities._version import get_versions
+from openff.utilities._version import get_versions  # type: ignore
 
 # Handle versioneer
 versions = get_versions()

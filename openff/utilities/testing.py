@@ -1,4 +1,4 @@
-from typing import Iterable, Optional, Union
+from typing import List, Optional, Union
 
 import pytest
 
@@ -29,17 +29,21 @@ def skip_if_missing(package_name: str, reason: Optional[str] = None):
     return requires_package
 
 
-def skip_if_missing_exec(exec: Union[str, Iterable[str]]):
+def skip_if_missing_exec(exec: Union[str, List[str]]):
     """Helper function to generate a pytest.mark.skipif decorator
     if an executable(s) is not found."""
     if isinstance(exec, str):
-        execs = [exec]
+        execs: List = [exec]
+    elif isinstance(exec, list):
+        execs: List = exec  # type: ignore[no-redef]
     else:
-        execs = exec
+        raise ValueError(
+            "Bad type passed to skip_if_missing_exec. " f"Found type {type(exec)}"
+        )
 
     found_exec = False
-    for exec in execs:
-        found_exec = found_exec or has_executable(exec)
+    for exec_ in execs:
+        found_exec = found_exec or has_executable(exec_)
 
     reason = f"Package {str(exec)} is required, but was not found."
     mark = pytest.mark.skipif(not found_exec, reason=reason)
