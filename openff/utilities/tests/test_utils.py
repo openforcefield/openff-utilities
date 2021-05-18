@@ -3,11 +3,10 @@ import os
 import pytest
 
 from openff.utilities.exceptions import MissingOptionalDependency
-from openff.utilities.testing import skip_if_missing
-from openff.utilities.utils import (
+from openff.utilities.utilities import (
     get_data_file_path,
     has_executable,
-    has_pkg,
+    has_package,
     requires_package,
     temporary_cd,
 )
@@ -30,21 +29,18 @@ def compare_paths(path_1: str, path_2: str) -> bool:
     return os.path.normpath(path_1) == os.path.normpath(path_2)
 
 
-@skip_if_missing("openff.recharge", reason="Needs a library to look in")
 def test_get_data_file_path():
     """Tests that the `get_data_file_path` can correctly find
     data files.
     """
 
     # Test a path which should exist.
-    bcc_path = get_data_file_path(
-        os.path.join("bcc", "original-am1-bcc.json"), package_name="openff.recharge"
-    )
-    assert os.path.isfile(bcc_path)
+    data_file_path = get_data_file_path("data.dat", package_name="openff.utilities")
+    assert os.path.isfile(data_file_path)
 
     # Test a path which should not exist.
     with pytest.raises(FileNotFoundError):
-        get_data_file_path("missing", package_name="openff.recharge")
+        get_data_file_path("missing.file", package_name="openff.utilities")
 
 
 def test_temporary_cd():
@@ -82,16 +78,16 @@ def test_temporary_cd():
     assert compare_paths(os.getcwd(), original_directory)
 
 
-def test_has_pkg():
-    assert has_pkg("os")
-    assert has_pkg("pytest")
-    assert not has_pkg("nummmmmmpy")
+def test_has_package():
+    assert has_package("os")
+    assert has_package("pytest")
+    assert not has_package("nummmmmmpy")
 
 
 def test_has_executable():
     assert has_executable("pwd")
     assert has_executable("pytest")
-    assert not has_pkg("pyyyyython")
+    assert not has_package("pyyyyython")
 
 
 def test_requires_package():
