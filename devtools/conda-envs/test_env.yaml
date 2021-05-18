@@ -11,4 +11,3 @@ dependencies:
   - pytest-cov
   - codecov
   - mypy
-  - openff-recharge

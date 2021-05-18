@@ -9,32 +9,32 @@ from typing import Optional
 from openff.utilities.exceptions import MissingOptionalDependency
 
 
-def has_pkg(pkg_name: str):
+def has_package(package_name: str):
     """
     Helper function to generically check if a Python package is installed.
     Intended to be used to check for optional dependencies.
 
     Parameters
     ----------
-    pkg_name : str
+    package_name : str
         The name of the Python package to check the availability of
 
     Returns
     -------
-    pkg_available : bool
+    package_available : bool
         Boolean indicator if the package is available or not
 
     Examples
     --------
-    >>> has_numpy = has_pkg('numpy')
+    >>> has_numpy = has_package('numpy')
     >>> has_numpy
     True
-    >>> has_foo = has_pkg('other_non_installed_pkg')
+    >>> has_foo = has_package('other_non_installed_package')
     >>> has_foo
     False
     """
     try:
-        importlib.import_module(pkg_name)
+        importlib.import_module(package_name)
     except ModuleNotFoundError:
         return False
     return True

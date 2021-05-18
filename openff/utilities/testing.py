@@ -1,11 +1,11 @@
-from typing import Iterable, Optional, Union
+from typing import List, Optional, Union
 
 import pytest
 
-from openff.utilities.utils import has_executable, has_pkg
+from openff.utilities.utilities import has_executable, has_package
 
 
-def skip_if_missing(pkg_name: str, reason: Optional[str] = None):
+def skip_if_missing(package_name: str, reason: Optional[str] = None):
     """
     Helper function to generate a pytest.mark.skipif decorator
     for any package. This allows tests to be skipped if some
@@ -13,33 +13,37 @@ def skip_if_missing(pkg_name: str, reason: Optional[str] = None):
 
     Parameters
     ----------
-    pkg_name : str
+    package_name : str
         The name of the package that is required for a test(s)
     reason : str, optional
         Explanation of why the skipped it to be tested
 
     Returns
     -------
-    requires_pkg : _pytest.mark.structures.MarkDecorator
+    requires_package : _pytest.mark.structures.MarkDecorator
         A pytest decorator that will skip tests if the package is not available
     """
     if not reason:
-        reason = f"Package {pkg_name} is required, but was not found."
-    requires_pkg = pytest.mark.skipif(not has_pkg(pkg_name), reason=reason)
-    return requires_pkg
+        reason = f"Package {package_name} is required, but was not found."
+    requires_package = pytest.mark.skipif(not has_package(package_name), reason=reason)
+    return requires_package
 
 
-def skip_if_missing_exec(exec: Union[str, Iterable[str]]):
+def skip_if_missing_exec(exec: Union[str, List[str]]):
     """Helper function to generate a pytest.mark.skipif decorator
     if an executable(s) is not found."""
     if isinstance(exec, str):
-        execs = [exec]
+        execs: List = [exec]
+    elif isinstance(exec, list):
+        execs: List = exec  # type: ignore[no-redef]
     else:
-        execs = exec
+        raise ValueError(
+            "Bad type passed to skip_if_missing_exec. " f"Found type {type(exec)}"
+        )
 
     found_exec = False
-    for exec in execs:
-        found_exec = found_exec or has_executable(exec)
+    for exec_ in execs:
+        found_exec = found_exec or has_executable(exec_)
 
     reason = f"Package {str(exec)} is required, but was not found."
     mark = pytest.mark.skipif(not found_exec, reason=reason)
