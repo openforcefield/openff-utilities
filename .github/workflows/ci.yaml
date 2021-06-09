@@ -67,7 +67,7 @@ jobs:
         pytest -v $COV openff/utilities/tests/
 
     - name: Codecov
-      uses: codecov/codecov-action@v1.5.0
+      uses: codecov/codecov-action@v1.5.2
       with:
         file: ./coverage.xml
         fail_ci_if_error: false
