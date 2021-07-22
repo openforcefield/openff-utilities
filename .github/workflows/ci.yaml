@@ -18,7 +18,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.7, 3.8, 3.9]
+        python-version: [3.7, 3.9]
+        amber-tools: [false, true]
+
     env:
       CI_OS: ${{ matrix.os }}
       PYVER: ${{ matrix.python-version }}
@@ -44,6 +46,19 @@ jobs:
         uname -a
         df -h
         ulimit -a
+
+    - name: Install AmberTools
+      if: matrix.amber-tools == true
+      shell: bash -l {0}
+      run: |
+        conda install --yes -c conda-forge ambertools
+        python -c "from shutil import which; assert which('sqm') is not None"
+
+    - name: Check AmberTools Missing
+      if: matrix.amber-tools == false
+      shell: bash -l {0}
+      run: |
+        python -c "from shutil import which; assert which('sqm') is None"
 
     - name: Environment Information
       shell: bash -l {0}
