@@ -108,6 +108,9 @@ def test_requires_package():
 
 
 @skip_if_missing("openeye.oechem")
+@pytest.mark.skipif(
+    "OE_LICENSE" not in os.environ, reason="Requires an OpenEye license is NOT set up"
+)
 def test_requires_oe_module():
     """Tests that the ``requires_package`` utility behaves as expected when an OpenEye license is set up."""
 
@@ -117,11 +120,30 @@ def test_requires_oe_module():
     requires_oe_module("oechem")(dummy_function)()
 
 
+@skip_if_missing("openeye.oechem")
+@pytest.mark.skipif(
+    "OE_LICENSE" in os.environ, reason="Requires an OpenEye license is NOT set up"
+)
+def test_requires_oe_module_installed_missing_license():
+    """Tests that the ``requires_package`` utility behaves as expected while OpenEye toolkits are
+    installed but no OpenEye license is set up."""
+
+    def dummy_function():
+        pass
+
+    with pytest.raises(MissingOptionalDependency) as error_info:
+        requires_oe_module("oechem")(dummy_function)()
+
+    assert "oechem" in str(error_info.value)
+    assert "conda-forge" not in str(error_info.value)
+
+
 @pytest.mark.skipif(
     has_package("openeye.oechem"), reason="Requires OpenEye toolkits are NOT installed"
 )
-def test_requires_oe_module_missing_license():
-    """Tests that the ``requires_package`` utility behaves as expected while no OpenEye license is set up."""
+def test_requires_oe_module_not_installed():
+    """Tests that the ``requires_package`` utility behaves as expected while OpenEye toolkits are
+    installed."""
 
     def dummy_function():
         pass

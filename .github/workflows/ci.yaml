@@ -85,6 +85,11 @@ jobs:
       run: |
         mamba install openeye-toolkits -c openeye -y
 
+    - name: Run test(s) with OpenEye toolkits installed but NOT licensed
+      shell: bash -l {0}
+      run:
+        pytest -v $COV openff/utilities/tests/test_utilities.py
+
     - name: License OpenEye
       shell: bash -l {0}
       run: |
@@ -93,10 +98,10 @@ jobs:
       env:
         SECRET_OE_LICENSE: ${{ secrets.OE_LICENSE }}
 
-    - name: Run test(s) requiring OpenEye toolkits installed
+    - name: Run test(s) with OpenEye toolkits installed and licensed
       shell: bash -l {0}
       run:
-        pytest -v $COV openff/utilities/tests/test_utilities.py::test_requires_oe_module
+        pytest -v $COV openff/utilities/tests/test_utilities.py
 
     - name: Codecov
       uses: codecov/codecov-action@v1.5.2
