@@ -12,3 +12,4 @@ dependencies:
   - codecov
   - mypy
   - types-setuptools
+  - types-toml

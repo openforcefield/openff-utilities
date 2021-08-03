@@ -3,6 +3,7 @@ from openff.utilities.utilities import (
     get_data_file_path,
     has_executable,
     has_package,
+    requires_oe_module,
     requires_package,
     temporary_cd,
 )
