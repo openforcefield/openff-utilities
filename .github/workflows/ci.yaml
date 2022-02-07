@@ -10,6 +10,10 @@ on:
       - "main"
       - "maintenance/.+"
 
+defaults:
+  run:
+    shell: bash -l {0}
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -19,7 +23,8 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python-version: [3.7, 3.9]
-        amber-tools: [false, true]
+        ambertools: [false, true]
+        openeye: [false, true]
 
     env:
       OE_LICENSE: ${{ github.workspace }}/oe_license.txt
@@ -40,68 +45,61 @@ jobs:
         show-channel-urls: true
 
     - name: Additional info about the build
-      shell: bash
       run: |
         uname -a
         df -h
         ulimit -a
 
     - name: Install AmberTools
-      if: matrix.amber-tools == true
-      shell: bash -l {0}
+      if: matrix.ambertools == true
       run: |
         conda install --yes -c conda-forge ambertools
         python -c "from shutil import which; assert which('sqm') is not None"
 
     - name: Check AmberTools Missing
-      if: matrix.amber-tools == false
-      shell: bash -l {0}
+      if: matrix.ambertools == false
       run: |
         python -c "from shutil import which; assert which('sqm') is None"
 
+    - name: Install OpenEye Toolkits
+      if: matrix.openeye == true
+      run: |
+        conda install --yes -c openeye openeye-toolkits
+        python -c "from openeye import oechem"
+
+    - name: Check OpenEye Toolkits missing
+      if: matrix.openeye == false
+      run: |
+        python -c devtools/scripts/assert_openeye_not_found.py
+
     - name: Environment Information
-      shell: bash -l {0}
       run: |
         conda info
         conda list
 
     - name: Install package
-      shell: bash -l {0}
       run: |
         python setup.py develop --no-deps
 
     - name: Run mypy
-      shell: bash -l {0}
       run: |
         mypy --show-error-codes --namespace-packages -p "openff.utilities"
 
-    - name: Run unit tests
-      shell: bash -l {0}
-      run: |
-        pytest -v $COV openff/utilities/tests/
-
-    - name: Install OpenEye toolkits
-      shell: bash -l {0}
-      run: |
-        mamba install openeye-toolkits -c openeye -y
-
-    - name: Run test(s) with OpenEye toolkits installed but NOT licensed
-      shell: bash -l {0}
+    - name: Run a test with OpenEye toolkits installed but NOT licensed
+      if: matrix.openeye == true
       run:
-        pytest -v $COV openff/utilities/tests/test_utilities.py
+        pytest -v $COV openff/utilities/tests/test_utilities.py::test_requires_oe_module_installed_missing_license
 
     - name: License OpenEye
-      shell: bash -l {0}
       run: |
         echo "${SECRET_OE_LICENSE}" > ${OE_LICENSE}
         python -c "from openeye import oechem; assert oechem.OEChemIsLicensed()"
       env:
         SECRET_OE_LICENSE: ${{ secrets.OE_LICENSE }}
 
-    - name: Run test(s) with OpenEye toolkits installed and licensed
-      shell: bash -l {0}
-      run:
-        pytest -v $COV openff/utilities/tests/test_utilities.py
+    - name: Run unit tests
+      run: |
+        pytest -v $COV openff/utilities/tests/
 
     - name: Codecov
       uses: codecov/codecov-action@v1.5.2
