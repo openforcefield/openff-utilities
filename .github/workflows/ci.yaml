@@ -16,13 +16,14 @@ defaults:
 
 jobs:
   test:
+    name: ${{ matrix.os }}, 🐍=${{ matrix.python-version }}, AmberTools=${{ matrix.ambertools }}, OpenEye=${{ matrix.openeye }]
     runs-on: ${{ matrix.os }}
     continue-on-error: true
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.7, 3.9]
+        python-version: [3.8, 3.9]
         ambertools: [false, true]
         openeye: [false, true]
 
@@ -91,6 +92,7 @@ jobs:
         pytest -v $COV openff/utilities/tests/test_utilities.py::test_requires_oe_module_installed_missing_license
 
     - name: License OpenEye
+      if: matrix.openeye == true
       run: |
         echo "${SECRET_OE_LICENSE}" > ${OE_LICENSE}
         python -c "from openeye import oechem; assert oechem.OEChemIsLicensed()"
