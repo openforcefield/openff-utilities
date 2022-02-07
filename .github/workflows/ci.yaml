@@ -16,7 +16,7 @@ defaults:
 
 jobs:
   test:
-    name: ${{ matrix.os }}, 🐍=${{ matrix.python-version }}, AmberTools=${{ matrix.ambertools }}, OpenEye=${{ matrix.openeye }]
+    name: ${{ matrix.os }}, 🐍=${{ matrix.python-version }}, AmberTools=${{ matrix.ambertools }}, OpenEye=${{ matrix.openeye }}
     runs-on: ${{ matrix.os }}
     continue-on-error: true
     strategy:
