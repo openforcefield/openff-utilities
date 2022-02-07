@@ -70,7 +70,7 @@ jobs:
     - name: Check OpenEye Toolkits missing
       if: matrix.openeye == false
       run: |
-        python -c devtools/scripts/assert_openeye_not_found.py
+        python devtools/scripts/assert_openeye_not_found.py
 
     - name: Environment Information
       run: |

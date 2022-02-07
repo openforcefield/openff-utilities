@@ -1,8 +1,8 @@
 openff-utilities
 ==============================
 [//]: # (Badges)
-[![GitHub Actions Build Status](https://github.com/mattwthompson/openff-utilities/workflows/CI/badge.svg)](https://github.com/mattwthompson/openff-utilities/actions?query=workflow%3ACI)
-[![codecov](https://codecov.io/gh/mattwthompson/openff-utilities/branch/main/graph/badge.svg)](https://codecov.io/gh/mattwthompson/openff-utilities/branch/main)
+[![GitHub Actions Build Status](https://github.com/openforcefield/openff-utilities/workflows/CI/badge.svg)](https://github.com/openforcefield/openff-utilities/actions?query=workflow%3ACI)
+[![codecov](https://codecov.io/gh/openforcefield/openff-utilities/branch/main/graph/badge.svg)](https://codecov.io/gh/openforcefield/openff-utilities/branch/main)
 
 
 A collection of miscellaneous utility functions used throughout the OpenFF stack
