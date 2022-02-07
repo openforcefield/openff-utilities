@@ -33,10 +33,12 @@ class MissingOptionalDependency(OpenFFException):
             message = f"{message} This is due to a missing license."
 
         library_name_corrected = library_name.replace(".", "-")
-        message = (
-            f"{message} Try installing the package by running"
-            f"`conda install -c conda-forge {library_name_corrected}"
-        )
+
+        if "openeye" not in library_name:
+            message = (
+                f"{message} Try installing the package by running"
+                f"`conda install -c conda-forge {library_name_corrected}"
+            )
 
         super(MissingOptionalDependency, self).__init__(message)
 

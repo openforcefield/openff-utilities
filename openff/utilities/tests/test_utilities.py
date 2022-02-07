@@ -3,10 +3,12 @@ import os
 import pytest
 
 from openff.utilities.exceptions import MissingOptionalDependency
+from openff.utilities.testing import skip_if_missing
 from openff.utilities.utilities import (
     get_data_file_path,
     has_executable,
     has_package,
+    requires_oe_module,
     requires_package,
     temporary_cd,
 )
@@ -103,3 +105,51 @@ def test_requires_package():
         requires_package("fake-lib")(dummy_function)()
 
     assert error_info.value.library_name == "fake-lib"
+
+
+@skip_if_missing("openeye.oechem")
+@pytest.mark.skipif(
+    "OE_LICENSE" not in os.environ, reason="Requires an OpenEye license is NOT set up"
+)
+def test_requires_oe_module():
+    """Tests that the ``requires_package`` utility behaves as expected when an OpenEye license is set up."""
+
+    def dummy_function():
+        pass
+
+    requires_oe_module("oechem")(dummy_function)()
+
+
+@skip_if_missing("openeye.oechem")
+@pytest.mark.skipif(
+    "OE_LICENSE" in os.environ, reason="Requires an OpenEye license is NOT set up"
+)
+def test_requires_oe_module_installed_missing_license():
+    """Tests that the ``requires_package`` utility behaves as expected while OpenEye toolkits are
+    installed but no OpenEye license is set up."""
+
+    def dummy_function():
+        pass
+
+    with pytest.raises(MissingOptionalDependency) as error_info:
+        requires_oe_module("oechem")(dummy_function)()
+
+    assert "oechem" in str(error_info.value)
+    assert "conda-forge" not in str(error_info.value)
+
+
+@pytest.mark.skipif(
+    has_package("openeye.oechem"), reason="Requires OpenEye toolkits are NOT installed"
+)
+def test_requires_oe_module_not_installed():
+    """Tests that the ``requires_package`` utility behaves as expected while OpenEye toolkits are
+    installed."""
+
+    def dummy_function():
+        pass
+
+    with pytest.raises(MissingOptionalDependency) as error_info:
+        requires_oe_module("oechem")(dummy_function)()
+
+    assert "oechem" in str(error_info.value)
+    assert "conda-forge" not in str(error_info.value)

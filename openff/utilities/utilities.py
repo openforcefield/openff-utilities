@@ -6,6 +6,8 @@ from functools import wraps
 from tempfile import TemporaryDirectory
 from typing import Optional
 
+from typing_extensions import Literal
+
 from openff.utilities.exceptions import MissingOptionalDependency
 
 
@@ -50,7 +52,7 @@ def requires_package(package_name: str):
     Parameters
     ----------
     package_name : str
-        The directory path to enter within the context
+        The name of the module to be imported.
 
     Raises
     ------
@@ -65,10 +67,57 @@ def requires_package(package_name: str):
 
             try:
                 importlib.import_module(package_name)
-            except (ImportError, ModuleNotFoundError):
+            except ImportError:
                 raise MissingOptionalDependency(library_name=package_name)
             except Exception as e:
                 raise e
+
+            return function(*args, **kwargs)
+
+        return wrapper
+
+    return inner_decorator
+
+
+def requires_oe_module(
+    module_name: Literal["oechem", "oeomega", "oequacpac", "oeiupac", "oedepict"],
+):
+    """
+    Helper function to denote that a funciton requires a particular OpenEye library.
+    A function decorated with this decorator will raise `MissingDependencyError` if
+    the module is not found by @requires_package or the module is not found to be
+    licensed.
+
+    Parameters
+    ----------
+    module_name : str
+        The name of the OpenEye module to be imported.
+
+    Raises
+    ------
+    MissingDependencyError
+    """
+
+    def inner_decorator(function):
+        @requires_package(f"openeye.{module_name}")
+        @wraps(function)
+        def wrapper(*args, **kwargs):
+
+            oe_module = importlib.import_module(f"openeye.{module_name}")
+
+            license_functions = {
+                "oechem": "OEChemIsLicensed",
+                "oequacpac": "OEQuacPacIsLicensed",
+                "oeiupac": "OEIUPACIsLicensed",
+                "oeomega": "OEOmegaIsLicensed",
+            }
+
+            is_licensed = getattr(oe_module, license_functions[module_name])()
+
+            if not is_licensed:
+                raise MissingOptionalDependency(
+                    library_name=f"openeye.{module_name}", license_issue=True
+                )
 
             return function(*args, **kwargs)
 
