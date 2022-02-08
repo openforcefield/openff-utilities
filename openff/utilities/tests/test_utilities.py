@@ -40,6 +40,12 @@ def test_get_data_file_path():
     data_file_path = get_data_file_path("data.dat", package_name="openff.utilities")
     assert os.path.isfile(data_file_path)
 
+    # Ensure a double-checking through data/ takes place
+    data_file_path = get_data_file_path(
+        "data/data.dat", package_name="openff.utilities"
+    )
+    assert os.path.isfile(data_file_path)
+
     # Test a path which should not exist.
     with pytest.raises(FileNotFoundError):
         get_data_file_path("missing.file", package_name="openff.utilities")

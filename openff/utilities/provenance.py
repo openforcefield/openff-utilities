@@ -3,8 +3,6 @@ import re
 import subprocess
 from typing import Dict, Optional
 
-import pkg_resources
-
 
 @functools.lru_cache()
 def _get_conda_list_package_versions() -> Dict[str, str]:
@@ -25,9 +23,4 @@ def _get_conda_list_package_versions() -> Dict[str, str]:
 def get_ambertools_version() -> Optional[str]:
     """Attempts to retrieve the version of the currently installed AmberTools."""
 
-    try:
-        distribution = pkg_resources.get_distribution("AmberTools")
-        return distribution.version
-
-    except pkg_resources.DistributionNotFound:
-        return _get_conda_list_package_versions().get("ambertools", None)
+    return _get_conda_list_package_versions().get("ambertools", None)

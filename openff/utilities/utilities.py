@@ -188,6 +188,10 @@ def temporary_cd(directory_path: Optional[str] = None):
 def get_data_file_path(relative_path: str, package_name: str) -> str:
     """Get the full path to one of the files in the data directory.
 
+    If no file is found at `relative_path`, a second attempt will be made
+    with `data/` preprended. If no files exist at either path, a FileNotFoundError
+    is raised.
+
     Parameters
     ----------
     relative_path : str
@@ -204,12 +208,15 @@ def get_data_file_path(relative_path: str, package_name: str) -> str:
     ------
     FileNotFoundError
     """
+    from importlib_resources import files
 
-    from pkg_resources import resource_filename
+    file_path = files(package_name) / relative_path
 
-    file_path = resource_filename(package_name, os.path.join("data", relative_path))
+    if not file_path.is_file():
+        try_path = files(package_name) / f"data/{relative_path}"
+        if try_path.is_file():
+            file_path = try_path
+        else:
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_path)
 
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_path)
-
-    return file_path
+    return file_path.as_posix()  # type: ignore

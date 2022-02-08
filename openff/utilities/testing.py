@@ -1,7 +1,5 @@
 from typing import List, Optional, Union
 
-import pytest
-
 from openff.utilities.utilities import has_executable, has_package
 
 
@@ -23,6 +21,8 @@ def skip_if_missing(package_name: str, reason: Optional[str] = None):
     requires_package : _pytest.mark.structures.MarkDecorator
         A pytest decorator that will skip tests if the package is not available
     """
+    import pytest
+
     if not reason:
         reason = f"Package {package_name} is required, but was not found."
     requires_package = pytest.mark.skipif(not has_package(package_name), reason=reason)
@@ -32,6 +32,8 @@ def skip_if_missing(package_name: str, reason: Optional[str] = None):
 def skip_if_missing_exec(exec: Union[str, List[str]]):
     """Helper function to generate a pytest.mark.skipif decorator
     if an executable(s) is not found."""
+    import pytest
+
     if isinstance(exec, str):
         execs: List = [exec]
     elif isinstance(exec, list):
