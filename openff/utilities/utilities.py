@@ -208,7 +208,7 @@ def get_data_file_path(relative_path: str, package_name: str) -> str:
     ------
     FileNotFoundError
     """
-    from importlib_resources import files
+    from importlib.resources import files
 
     file_path = files(package_name) / relative_path
 
@@ -219,4 +219,4 @@ def get_data_file_path(relative_path: str, package_name: str) -> str:
         else:
             raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_path)
 
-    return file_path.as_posix()
+    return file_path.as_posix()  # type: ignore
