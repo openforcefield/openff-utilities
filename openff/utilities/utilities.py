@@ -204,10 +204,11 @@ def get_data_file_path(relative_path: str, package_name: str) -> str:
     ------
     FileNotFoundError
     """
+    import importlib_resources
 
-    from pkg_resources import resource_filename
-
-    file_path = resource_filename(package_name, os.path.join("data", relative_path))
+    file_path = importlib_resources.files(package_name) / os.path.join(
+        "data", relative_path
+    )
 
     if not os.path.exists(file_path):
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_path)
