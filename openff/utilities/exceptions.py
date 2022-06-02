@@ -36,8 +36,8 @@ class MissingOptionalDependency(OpenFFException):
 
         if "openeye" not in library_name:
             message = (
-                f"{message} Try installing the package by running"
-                f"`conda install -c conda-forge {library_name_corrected}"
+                f"{message} Try installing the package by running "
+                f"`conda install -c conda-forge {library_name_corrected}`"
             )
 
         super(MissingOptionalDependency, self).__init__(message)
