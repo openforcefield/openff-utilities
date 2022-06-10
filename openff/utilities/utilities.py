@@ -8,7 +8,7 @@ from typing import Optional
 
 from typing_extensions import Literal
 
-from openff.utilities.exceptions import MissingOptionalDependency
+from openff.utilities.exceptions import MissingOptionalDependencyError
 
 
 def has_package(package_name: str):
@@ -46,7 +46,7 @@ def requires_package(package_name: str):
     """
     Helper function to denote that a funciton requires some optional
     dependency. A function decorated with this decorator will raise
-    `MissingDependencyError` if the package is not found by
+    `MissingOptionalDependencyError` if the package is not found by
     `importlib.import_module()`.
 
     Parameters
@@ -56,7 +56,7 @@ def requires_package(package_name: str):
 
     Raises
     ------
-    MissingDependencyError
+    MissingOptionalDependencyError
 
     """
 
@@ -68,7 +68,7 @@ def requires_package(package_name: str):
             try:
                 importlib.import_module(package_name)
             except ImportError:
-                raise MissingOptionalDependency(library_name=package_name)
+                raise MissingOptionalDependencyError(library_name=package_name)
             except Exception as e:
                 raise e
 
@@ -84,7 +84,7 @@ def requires_oe_module(
 ):
     """
     Helper function to denote that a funciton requires a particular OpenEye library.
-    A function decorated with this decorator will raise `MissingDependencyError` if
+    A function decorated with this decorator will raise `MissingOptionalDependencyError` if
     the module is not found by @requires_package or the module is not found to be
     licensed.
 
@@ -95,7 +95,7 @@ def requires_oe_module(
 
     Raises
     ------
-    MissingDependencyError
+    MissingOptionalDependencyError
     """
 
     def inner_decorator(function):
@@ -115,7 +115,7 @@ def requires_oe_module(
             is_licensed = getattr(oe_module, license_functions[module_name])()
 
             if not is_licensed:
-                raise MissingOptionalDependency(
+                raise MissingOptionalDependencyError(
                     library_name=f"openeye.{module_name}", license_issue=True
                 )
 

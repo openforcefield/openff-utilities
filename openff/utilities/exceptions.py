@@ -1,8 +1,8 @@
-class OpenFFException(BaseException):
+class OpenFFError(BaseException):
     """The base exception from which most custom exceptions in openff-utilities should inherit."""
 
 
-class MissingOptionalDependency(OpenFFException):
+class MissingOptionalDependencyError(OpenFFError):
     """An exception raised when an optional dependency is required
     but cannot be found.
 
@@ -40,7 +40,16 @@ class MissingOptionalDependency(OpenFFException):
                 f"`conda install -c conda-forge {library_name_corrected}`"
             )
 
-        super(MissingOptionalDependency, self).__init__(message)
+        super(MissingOptionalDependencyError, self).__init__(message)
 
         self.library_name = library_name
         self.license_issue = license_issue
+
+
+class MissingOptionalDependency(MissingOptionalDependencyError):
+    import warnings
+
+    warnings.warn(
+        "MissingOptionalDependency is deprecated. Use MissingOptionalDependencyError instead.",
+        DeprecationWarning,
+    )

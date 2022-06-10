@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from openff.utilities.exceptions import MissingOptionalDependency
+from openff.utilities.exceptions import MissingOptionalDependencyError
 from openff.utilities.testing import skip_if_missing
 from openff.utilities.utilities import (
     get_data_file_path,
@@ -107,7 +107,7 @@ def test_requires_package():
     # sys should always be found so this should not raise an exception.
     requires_package("sys")(dummy_function)()
 
-    with pytest.raises(MissingOptionalDependency) as error_info:
+    with pytest.raises(MissingOptionalDependencyError) as error_info:
         requires_package("fake-lib")(dummy_function)()
 
     assert error_info.value.library_name == "fake-lib"
@@ -137,7 +137,7 @@ def test_requires_oe_module_installed_missing_license():
     def dummy_function():
         pass
 
-    with pytest.raises(MissingOptionalDependency) as error_info:
+    with pytest.raises(MissingOptionalDependencyError) as error_info:
         requires_oe_module("oechem")(dummy_function)()
 
     assert "oechem" in str(error_info.value)
@@ -154,7 +154,7 @@ def test_requires_oe_module_not_installed():
     def dummy_function():
         pass
 
-    with pytest.raises(MissingOptionalDependency) as error_info:
+    with pytest.raises(MissingOptionalDependencyError) as error_info:
         requires_oe_module("oechem")(dummy_function)()
 
     assert "oechem" in str(error_info.value)
