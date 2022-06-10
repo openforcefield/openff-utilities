@@ -3,7 +3,7 @@ import pytest
 from openff.utilities.exceptions import (
     MissingOptionalDependency,
     MissingOptionalDependencyError,
-    OpenFFException,
+    OpenFFError,
 )
 
 
@@ -20,7 +20,7 @@ def test_exceptions():
     ):
         raise MissingOptionalDependencyError(library_name="barbaz", license_issue=True)
 
-    with pytest.raises(OpenFFException):
+    with pytest.raises(OpenFFError):
         raise MissingOptionalDependencyError("numpy")
 
 

@@ -1,8 +1,8 @@
-class OpenFFException(BaseException):
+class OpenFFError(BaseException):
     """The base exception from which most custom exceptions in openff-utilities should inherit."""
 
 
-class MissingOptionalDependencyError(OpenFFException):
+class MissingOptionalDependencyError(OpenFFError):
     """An exception raised when an optional dependency is required
     but cannot be found.
 
