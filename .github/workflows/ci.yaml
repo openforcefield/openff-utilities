@@ -34,16 +34,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: conda-incubator/setup-miniconda@v2.1.1
-      with:
-        python-version: ${{ matrix.python-version }}
-        activate-environment: test
-        mamba-version: "*"
-        channels: conda-forge,defaults
+    - name: Set up conda environment
+      uses: mamba-org/provision-with-micromamba@main
         environment-file: devtools/conda-envs/test_env.yaml
-        auto-update-conda: true
-        auto-activate-base: false
-        show-channel-urls: true
+        extra-specs: |
+          python=${{ matrix.python-version }}
+          mamba
 
     - name: Additional info about the build
       run: |
@@ -54,7 +50,7 @@ jobs:
     - name: Install AmberTools
       if: matrix.ambertools == true
       run: |
-        conda install --yes -c conda-forge ambertools
+        mamba install --yes -c conda-forge ambertools
         python -c "from shutil import which; assert which('sqm') is not None"
 
     - name: Check AmberTools Missing
@@ -65,7 +61,7 @@ jobs:
     - name: Install OpenEye Toolkits
       if: matrix.openeye == true
       run: |
-        conda install --yes -c openeye openeye-toolkits
+        mamba install --yes -c openeye openeye-toolkits
         python -c "from openeye import oechem"
 
     - name: Check OpenEye Toolkits missing
