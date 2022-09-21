@@ -1,9 +1,6 @@
 import pytest
 
-from openff.utilities.exceptions import (
-    MissingOptionalDependencyError,
-    OpenFFError,
-)
+from openff.utilities.exceptions import MissingOptionalDependencyError, OpenFFError
 
 
 def test_exceptions():

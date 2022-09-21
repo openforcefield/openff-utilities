@@ -1,7 +1,5 @@
 from openff.utilities._version import get_versions  # type: ignore
-from openff.utilities.exceptions import (
-    MissingOptionalDependencyError,
-)
+from openff.utilities.exceptions import MissingOptionalDependencyError
 from openff.utilities.provenance import get_ambertools_version
 from openff.utilities.testing import skip_if_missing, skip_if_missing_exec
 from openff.utilities.utilities import (
