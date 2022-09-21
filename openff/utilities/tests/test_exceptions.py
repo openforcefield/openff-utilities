@@ -1,7 +1,6 @@
 import pytest
 
 from openff.utilities.exceptions import (
-    MissingOptionalDependency,
     MissingOptionalDependencyError,
     OpenFFError,
 )
@@ -22,9 +21,3 @@ def test_exceptions():
 
     with pytest.raises(OpenFFError):
         raise MissingOptionalDependencyError("numpy")
-
-
-def test_missing_optional_dependency_deprecation():
-    with pytest.raises(MissingOptionalDependency):
-        with pytest.warns(UserWarning, match="DEP"):
-            raise MissingOptionalDependency("foobar")
