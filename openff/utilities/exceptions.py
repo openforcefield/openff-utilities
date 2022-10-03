@@ -44,12 +44,3 @@ class MissingOptionalDependencyError(OpenFFError):
 
         self.library_name = library_name
         self.license_issue = license_issue
-
-
-class MissingOptionalDependency(MissingOptionalDependencyError):
-    import warnings
-
-    warnings.warn(
-        "MissingOptionalDependency is deprecated. Use MissingOptionalDependencyError instead.",
-        DeprecationWarning,
-    )
