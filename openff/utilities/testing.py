@@ -1,9 +1,12 @@
-from typing import List, Optional, Union
+from typing import TYPE_CHECKING, List, Optional, Union
 
 from openff.utilities.utilities import has_executable, has_package
 
+if TYPE_CHECKING:
+    from _pytest.mark.structures import MarkDecorator
 
-def skip_if_missing(package_name: str, reason: Optional[str] = None):
+
+def skip_if_missing(package_name: str, reason: Optional[str] = None) -> "MarkDecorator":
     """
     Helper function to generate a pytest.mark.skipif decorator
     for any package. This allows tests to be skipped if some
@@ -29,15 +32,16 @@ def skip_if_missing(package_name: str, reason: Optional[str] = None):
     return requires_package
 
 
-def skip_if_missing_exec(exec: Union[str, List[str]]):
+def skip_if_missing_exec(exec: Union[str, List[str]]) -> "MarkDecorator":
     """Helper function to generate a pytest.mark.skipif decorator
     if an executable(s) is not found."""
     import pytest
 
+    execs: List[str]
     if isinstance(exec, str):
-        execs: List = [exec]
+        execs = [exec]
     elif isinstance(exec, list):
-        execs: List = exec  # type: ignore[no-redef]
+        execs = exec
     else:
         raise ValueError(
             "Bad type passed to skip_if_missing_exec. " f"Found type {type(exec)}"
