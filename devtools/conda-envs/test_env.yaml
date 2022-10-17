@@ -5,6 +5,7 @@ dependencies:
     # Base depends
   - python
   - pip
+  - importlib_resources
 
     # Testing
   - pytest
