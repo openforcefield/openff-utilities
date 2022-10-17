@@ -4,14 +4,16 @@ import os
 from contextlib import contextmanager
 from functools import wraps
 from tempfile import TemporaryDirectory
-from typing import Optional
-
-from typing_extensions import Literal
+from typing import Any, Callable, Generator, Literal, Optional, TypeVar
 
 from openff.utilities.exceptions import MissingOptionalDependencyError
 
+# https://mypy.readthedocs.io/en/stable/generics.html#declaring-decorators
 
-def has_package(package_name: str):
+F = TypeVar("F", bound=Callable[..., Any])
+
+
+def has_package(package_name: str) -> bool:
     """
     Helper function to generically check if a Python package is installed.
     Intended to be used to check for optional dependencies.
@@ -42,7 +44,7 @@ def has_package(package_name: str):
     return True
 
 
-def requires_package(package_name: str):
+def requires_package(package_name: str) -> Callable[..., Any]:
     """
     Helper function to denote that a funciton requires some optional
     dependency. A function decorated with this decorator will raise
@@ -60,9 +62,9 @@ def requires_package(package_name: str):
 
     """
 
-    def inner_decorator(function):
+    def inner_decorator(function: F) -> F:
         @wraps(function)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args, **kwargs):  # type: ignore[no-untyped-def]
             import importlib
 
             try:
@@ -74,14 +76,14 @@ def requires_package(package_name: str):
 
             return function(*args, **kwargs)
 
-        return wrapper
+        return wrapper  # type: ignore[return-value]
 
     return inner_decorator
 
 
 def requires_oe_module(
     module_name: Literal["oechem", "oeomega", "oequacpac", "oeiupac", "oedepict"],
-):
+) -> Callable[..., Any]:
     """
     Helper function to denote that a funciton requires a particular OpenEye library.
     A function decorated with this decorator will raise `MissingOptionalDependencyError` if
@@ -98,10 +100,10 @@ def requires_oe_module(
     MissingOptionalDependencyError
     """
 
-    def inner_decorator(function):
+    def inner_decorator(function: F) -> F:
         @requires_package(f"openeye.{module_name}")
         @wraps(function)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args, **kwargs):  # type: ignore
 
             oe_module = importlib.import_module(f"openeye.{module_name}")
 
@@ -121,7 +123,7 @@ def requires_oe_module(
 
             return function(*args, **kwargs)
 
-        return wrapper
+        return wrapper  # type: ignore
 
     return inner_decorator
 
@@ -129,7 +131,7 @@ def requires_oe_module(
 def has_executable(program_name: str) -> bool:
     import os
 
-    def _is_executable(fpath):
+    def _is_executable(fpath: str) -> bool:
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
 
     fpath, fname = os.path.split(program_name)
@@ -147,7 +149,7 @@ def has_executable(program_name: str) -> bool:
 
 
 @contextmanager
-def temporary_cd(directory_path: Optional[str] = None):
+def temporary_cd(directory_path: Optional[str] = None) -> Generator[None, None, None]:
     """Temporarily move the current working directory to the path
     specified. If no path is given, a temporary directory will be
     created, moved into, and then destroyed when the context manager

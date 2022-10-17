@@ -5,7 +5,6 @@ dependencies:
     # Base depends
   - python
   - pip
-    # Needed for Python <=3.8
   - importlib_resources
 
     # Testing

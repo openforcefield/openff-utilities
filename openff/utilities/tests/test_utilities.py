@@ -95,6 +95,9 @@ def test_has_package():
 def test_has_executable():
     assert has_executable("pwd")
     assert has_executable("pytest")
+
+    assert has_executable("/usr/bin/whoami")
+
     assert not has_package("pyyyyython")
 
 
