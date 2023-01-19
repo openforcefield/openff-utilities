@@ -219,9 +219,9 @@ def get_data_dir_path(relative_path: str, package_name: str) -> str:
     file_path = files(package_name) / relative_path
 
     if file_path.is_dir():
-        return str(file_path)
+        return file_path.as_posix()
     elif (files(package_name) / "data" / relative_path).is_dir():
-        return str(files(package_name) / "data" / relative_path)
+        return (files(package_name) / "data" / relative_path).as_posix()
     else:
         raise NotADirectoryError(
             f"Directory {relative_path} not found in {package_name}."
