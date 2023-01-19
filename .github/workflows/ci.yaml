@@ -79,8 +79,7 @@ jobs:
 
     - name: Run mypy
       run: |
-        mypy --namespace-packages -p "openff.utilities" \
-          --strict --show-error-codes --implicit-reexport
+        mypy -p "openff.utilities" --strict --show-error-codes --implicit-reexport
 
     - name: Run a test with OpenEye toolkits installed but NOT licensed
       if: matrix.openeye == true
