@@ -5,6 +5,7 @@ import pytest
 from openff.utilities.exceptions import MissingOptionalDependencyError
 from openff.utilities.testing import skip_if_missing
 from openff.utilities.utilities import (
+    get_data_dir_path,
     get_data_file_path,
     has_executable,
     has_package,
@@ -31,24 +32,50 @@ def compare_paths(path_1: str, path_2: str) -> bool:
     return os.path.normpath(path_1) == os.path.normpath(path_2)
 
 
+def test_get_data_dir_path():
+    """Tests that the `get_data_dir_path` can correctly find
+    data directories.
+    """
+
+    # Test a path which should exist.
+    data_file_path = get_data_dir_path("data/more", package_name="openff.utilities")
+    assert os.path.isdir(data_file_path)
+
+    # Ensure a double-checking through data/ takes place
+    data_file_path = get_data_dir_path("more", package_name="openff.utilities")
+    assert os.path.isdir(data_file_path)
+
+    # Test a path which should not exist.
+    with pytest.raises(NotADirectoryError):
+        get_data_dir_path("missing", package_name="openff.utilities")
+
+    # Test that a file directory raises NotaDirectoryError
+    with pytest.raises(NotADirectoryError):
+        get_data_dir_path("data/data.dat", package_name="openff.utilities")
+
+
 def test_get_data_file_path():
     """Tests that the `get_data_file_path` can correctly find
     data files.
     """
 
     # Test a path which should exist.
-    data_file_path = get_data_file_path("data.dat", package_name="openff.utilities")
-    assert os.path.isfile(data_file_path)
-
-    # Ensure a double-checking through data/ takes place
     data_file_path = get_data_file_path(
         "data/data.dat", package_name="openff.utilities"
     )
     assert os.path.isfile(data_file_path)
 
+    # Ensure a double-checking through data/ takes place
+    data_file_path = get_data_file_path("data.dat", package_name="openff.utilities")
+    assert os.path.isfile(data_file_path)
+
     # Test a path which should not exist.
     with pytest.raises(FileNotFoundError):
         get_data_file_path("missing.file", package_name="openff.utilities")
+
+    # Test that a directory raises FileNotFoundError
+    with pytest.raises(FileNotFoundError):
+        get_data_file_path("data/", package_name="openff.utilities")
 
 
 def test_temporary_cd():
