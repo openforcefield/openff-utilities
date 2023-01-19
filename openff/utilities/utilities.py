@@ -187,6 +187,47 @@ def temporary_cd(directory_path: Optional[str] = None) -> Generator[None, None, 
         os.chdir(old_directory)
 
 
+def get_data_dir_path(relative_path: str, package_name: str) -> str:
+    """Get the full path to a directory within a module's tree.
+
+    If no directory is found at `relative_path`, a second attempt will be made
+    with `data/` preprended. If no directory is found at path, a NotADirectoryError
+    is raised.
+
+    Parameters
+    ----------
+    relative_path : str
+        The relative path of the file to load.
+    package_name : str
+        The name of the package in which a file is to be loaded, i.e. "openff.toolkit" or "openff.evaluator".
+
+    Returns
+    -------
+        The absolute path to the file.
+
+    Raises
+    ------
+    NotADirectoryError
+
+    See Also
+    --------
+    get_data_file_path, for getting the path to a particular file in a data directory.
+
+    """
+    from importlib_resources import files
+
+    file_path = files(package_name) / relative_path
+
+    if file_path.is_dir():
+        return str(file_path)
+    elif (files(package_name) / "data" / relative_path).is_dir():
+        return str(files(package_name) / "data" / relative_path)
+    else:
+        raise NotADirectoryError(
+            f"Directory {relative_path} not found in {package_name}."
+        )
+
+
 def get_data_file_path(relative_path: str, package_name: str) -> str:
     """Get the full path to one of the files in the data directory.
 
@@ -209,6 +250,11 @@ def get_data_file_path(relative_path: str, package_name: str) -> str:
     Raises
     ------
     FileNotFoundError
+
+    See Also
+    --------
+    get_data_dir_path, for getting the path to a directory instead of an individual file.
+
     """
     from importlib_resources import files
 
