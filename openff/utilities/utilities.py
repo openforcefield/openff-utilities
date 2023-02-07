@@ -107,7 +107,6 @@ def requires_oe_module(
         @requires_package(f"openeye.{module_name}")
         @wraps(function)
         def wrapper(*args, **kwargs):  # type: ignore
-
             oe_module = importlib.import_module(f"openeye.{module_name}")
 
             license_functions = {
@@ -174,15 +173,12 @@ def temporary_cd(directory_path: Optional[str] = None) -> Generator[None, None, 
     old_directory = os.getcwd()
 
     try:
-
         if directory_path is None:
-
             with TemporaryDirectory() as new_directory:
                 os.chdir(new_directory)
                 yield
 
         else:
-
             os.chdir(directory_path)
             yield
 

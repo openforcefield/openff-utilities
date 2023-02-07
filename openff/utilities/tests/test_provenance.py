@@ -6,7 +6,6 @@ from openff.utilities.provenance import get_ambertools_version
 
 
 def test_get_ambertools_version_found():
-
     # Skip if ambertools is not installed.
     pytest.importorskip("parmed")
 
@@ -14,7 +13,6 @@ def test_get_ambertools_version_found():
 
 
 def test_get_ambertools_version_not_found():
-
     try:
         importlib.import_module("parmed")
     except ImportError:

@@ -13,7 +13,6 @@ def _get_conda_list_package_versions() -> Dict[str, str]:
     package_versions = {}
 
     for output_line in list_output[3:-1]:
-
         package_name, package_version, *_ = re.split(" +", output_line)
         package_versions[package_name] = package_version
 
