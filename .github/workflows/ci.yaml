@@ -24,6 +24,9 @@ jobs:
         python-version: ["3.9", "3.10", "3.11"]
         ambertools: [false, true]
         openeye: [false, true]
+        exclude:
+          - python-version: "3.11"
+            ambertools: true
 
     env:
       OE_LICENSE: ${{ github.workspace }}/oe_license.txt
