@@ -21,9 +21,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.9", "3.10", "3.11"]
         ambertools: [false, true]
         openeye: [false, true]
+        exclude:
+          - python-version: "3.11"
+            ambertools: true
 
     env:
       OE_LICENSE: ${{ github.workspace }}/oe_license.txt
