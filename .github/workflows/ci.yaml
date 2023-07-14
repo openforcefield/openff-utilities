@@ -84,7 +84,7 @@ jobs:
     - name: Run a test with OpenEye toolkits installed but NOT licensed
       if: matrix.openeye == true
       run:
-        pytest -v $COV openff/utilities/tests/test_utilities.py::test_requires_oe_module_installed_missing_license
+        pytest -v $COV openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license
 
     - name: License OpenEye
       if: matrix.openeye == true
@@ -96,7 +96,7 @@ jobs:
 
     - name: Run unit tests
       run: |
-        pytest -v $COV openff/utilities/tests/
+        pytest -v $COV openff/utilities/_tests/
 
     - name: Codecov
       uses: codecov/codecov-action@v3
