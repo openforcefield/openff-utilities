@@ -155,7 +155,9 @@ def test_requires_oe_module():
     requires_oe_module("oechem")(dummy_function)()
 
 
-@pytest.mark.parametrize('oe_module', ['oechem', 'oeiupac', 'oeomega', 'oequacpac', 'oedepict'])
+@pytest.mark.parametrize(
+    "oe_module", ["oechem", "oeiupac", "oeomega", "oequacpac", "oedepict"]
+)
 @skip_if_missing("openeye")
 @pytest.mark.skipif(
     "OE_LICENSE" in os.environ, reason="Requires an OpenEye license is NOT set up"
