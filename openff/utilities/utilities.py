@@ -114,6 +114,7 @@ def requires_oe_module(
                 "oequacpac": "OEQuacPacIsLicensed",
                 "oeiupac": "OEIUPACIsLicensed",
                 "oeomega": "OEOmegaIsLicensed",
+                "oedepict": "OEDepictIsLicensed",
             }
 
             is_licensed = getattr(oe_module, license_functions[module_name])()
