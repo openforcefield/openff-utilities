@@ -30,7 +30,7 @@ jobs:
       COV: --cov=openff/utilities --cov-report=xml --cov-config=setup.cfg --cov-append
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up conda environment
       uses: mamba-org/setup-micromamba@v1
