@@ -44,3 +44,9 @@ class MissingOptionalDependencyError(OpenFFError):
 
         self.library_name = library_name
         self.license_issue = license_issue
+
+
+class CondaExecutableNotFoundError(OpenFFError):
+    """
+    A conda (or mamba/micromamba) executable is not found.
+    """
