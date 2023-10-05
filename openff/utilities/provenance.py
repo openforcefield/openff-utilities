@@ -7,12 +7,23 @@ from typing import Dict, Optional
 @functools.lru_cache()
 def _get_conda_list_package_versions() -> Dict[str, str]:
     """Returns the versions of any packages found while executing `conda list`."""
+    from openff.utilities.exceptions import CondaExecutableNotFoundError
+    from openff.utilities.utilities import has_executable
 
-    list_output = subprocess.check_output(["conda", "list"]).decode().split("\n")
+    if has_executable("mamba"):
+        conda_executable = "mamba"
+    elif has_executable("conda"):
+        conda_executable = "conda"
+    elif has_executable("micromamba"):
+        conda_executable = "micromamba"
+    else:
+        raise CondaExecutableNotFoundError()
+
+    output = subprocess.check_output([conda_executable, "list"]).decode().split("\n")
 
     package_versions = {}
 
-    for output_line in list_output[3:-1]:
+    for output_line in output[3:-1]:
         package_name, package_version, *_ = re.split(" +", output_line)
         package_versions[package_name] = package_version
 
