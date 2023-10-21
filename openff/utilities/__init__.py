@@ -11,7 +11,8 @@ from openff.utilities.utilities import (
     temporary_cd,
 )
 
-# Handle versioneer
+from . import _version
+
 versions = get_versions()
 __version__ = versions["version"]
 __git_revision__ = versions["full-revisionid"]
