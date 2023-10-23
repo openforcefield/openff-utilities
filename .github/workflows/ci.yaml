@@ -24,6 +24,11 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
         ambertools: [false, true]
         openeye: [false, true]
+        exclude:
+          - python-version: "3.12"
+            openeye: true
+          - python-version: "3.12"
+            ambertools: true
 
     env:
       OE_LICENSE: ${{ github.workspace }}/oe_license.txt
@@ -38,18 +43,11 @@ jobs:
         environment-file: devtools/conda-envs/test_env.yaml
         create-args: >-
           python=${{ matrix.python-version }}
-          mamba
-
-    - name: Additional info about the build
-      run: |
-        uname -a
-        df -h
-        ulimit -a
 
     - name: Install AmberTools
       if: matrix.ambertools == true
       run: |
-        mamba install --yes -c conda-forge ambertools
+        micromamba install --yes -c conda-forge ambertools
         python -c "from shutil import which; assert which('sqm') is not None"
 
     - name: Check AmberTools Missing
@@ -60,7 +58,7 @@ jobs:
     - name: Install OpenEye Toolkits
       if: matrix.openeye == true
       run: |
-        mamba install --yes -c openeye openeye-toolkits
+        micromamba install --yes -c openeye openeye-toolkits
         python -c "from openeye import oechem"
 
     - name: Check OpenEye Toolkits missing
@@ -75,7 +73,7 @@ jobs:
 
     - name: Install package
       run: |
-        python setup.py develop --no-deps
+        python -m pip install -e .
 
     - name: Run mypy
       run: |
