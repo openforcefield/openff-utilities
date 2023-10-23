@@ -10,7 +10,6 @@ dependencies:
     # Testing
   - pytest
   - pytest-cov
-  - codecov
-  - mypy
+  - mypy =1.6
   - types-setuptools
   - types-toml
