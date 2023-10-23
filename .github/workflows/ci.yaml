@@ -66,18 +66,15 @@ jobs:
       run: |
         python devtools/scripts/assert_openeye_not_found.py
 
-    - name: Environment Information
-      run: |
-        conda info
-        conda list
-
     - name: Install package
-      run: |
-        python -m pip install -e .
+      run: python -m pip install -e .
+
+    - name: Environment Information
+      run: micromamba list
 
     - name: Run mypy
-      run: |
-        mypy -p "openff.utilities" --strict --show-error-codes --implicit-reexport
+      if: ${{ matrix.python-version == 3.12 }}
+      run: mypy -p "openff.utilities" --strict --show-error-codes --implicit-reexport
 
     - name: Run a test with OpenEye toolkits installed but NOT licensed
       if: matrix.openeye == true
