@@ -9,6 +9,7 @@ def _get_conda_list_package_versions() -> Dict[str, str]:
     """Returns the versions of any packages found while executing `conda list`."""
     from openff.utilities.exceptions import CondaExecutableNotFoundError
     from openff.utilities.utilities import has_executable
+
     used_micromamba = False
     if has_executable("mamba"):
         conda_executable = "mamba"
@@ -30,7 +31,7 @@ def _get_conda_list_package_versions() -> Dict[str, str]:
         start_line = 4
     else:
         start_line = 3
-    
+
     for output_line in output[start_line:-1]:
         output_line = output_line.strip()
         package_name, package_version, *_ = re.split(" +", output_line)
