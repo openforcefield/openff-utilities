@@ -32,6 +32,7 @@ def _get_conda_list_package_versions() -> Dict[str, str]:
         start_line = 3
     
     for output_line in output[start_line:-1]:
+        output_line = output_line.strip()
         package_name, package_version, *_ = re.split(" +", output_line)
         package_versions[package_name] = package_version
 
