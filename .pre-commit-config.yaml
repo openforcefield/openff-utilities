@@ -18,3 +18,10 @@ repos:
   hooks:
   - id: flake8
     files: ^openff
+- repo: https://github.com/asottile/pyupgrade
+  rev: v3.15.0
+  hooks:
+  - id: pyupgrade
+    files: ^openff|plugins|stubs
+    exclude: openff/utilities/_version.py|setup.py
+    args: ["--py39-plus"]

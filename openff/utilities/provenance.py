@@ -1,11 +1,11 @@
 import functools
 import re
 import subprocess
-from typing import Dict, Optional
+from typing import Optional
 
 
-@functools.lru_cache()
-def _get_conda_list_package_versions() -> Dict[str, str]:
+@functools.lru_cache
+def _get_conda_list_package_versions() -> dict[str, str]:
     """Returns the versions of any packages found while executing `conda list`."""
     from openff.utilities.exceptions import CondaExecutableNotFoundError
     from openff.utilities.utilities import has_executable

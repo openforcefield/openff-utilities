@@ -1,10 +1,11 @@
 import errno
 import importlib
 import os
+from collections.abc import Generator
 from contextlib import contextmanager
 from functools import wraps
 from tempfile import TemporaryDirectory
-from typing import TYPE_CHECKING, Any, Callable, Generator, Literal, Optional, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Literal, Optional, TypeVar
 
 from openff.utilities.exceptions import MissingOptionalDependencyError
 
