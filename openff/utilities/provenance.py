@@ -28,6 +28,8 @@ def _get_conda_list_package_versions() -> Dict[str, str]:
     package_versions = {}
 
     for output_line in output[3:-1]:
+    # The output format of `conda`/`mamba list` and `micromamba list` are different.
+    # See https://github.com/openforcefield/openff-utilities/issues/65
         package_name, package_version, *_ = output_line.split()
         package_versions[package_name] = package_version
 
