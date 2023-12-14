@@ -1,5 +1,4 @@
 import functools
-import re
 import subprocess
 from typing import Dict, Optional
 
@@ -10,21 +9,28 @@ def _get_conda_list_package_versions() -> Dict[str, str]:
     from openff.utilities.exceptions import CondaExecutableNotFoundError
     from openff.utilities.utilities import has_executable
 
-    if has_executable("mamba"):
+    if has_executable("micromamba"):
+        conda_executable = "micromamba"
+    elif has_executable("mamba"):
         conda_executable = "mamba"
     elif has_executable("conda"):
         conda_executable = "conda"
-    elif has_executable("micromamba"):
-        conda_executable = "micromamba"
     else:
         raise CondaExecutableNotFoundError()
 
-    output = subprocess.check_output([conda_executable, "list"]).decode().split("\n")
+    output = list(
+        filter(
+            lambda x: len(x) > 0,
+            subprocess.check_output([conda_executable, "list"]).decode().split("\n"),
+        )
+    )
 
     package_versions = {}
 
     for output_line in output[3:-1]:
-        package_name, package_version, *_ = re.split(" +", output_line)
+        # The output format of `conda`/`mamba list` and `micromamba list` are different.
+        # See https://github.com/openforcefield/openff-utilities/issues/65
+        package_name, package_version, *_ = output_line.split()
         package_versions[package_name] = package_version
 
     return package_versions
