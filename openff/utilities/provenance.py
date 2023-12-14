@@ -10,14 +10,12 @@ def _get_conda_list_package_versions() -> Dict[str, str]:
     from openff.utilities.exceptions import CondaExecutableNotFoundError
     from openff.utilities.utilities import has_executable
 
-    used_micromamba = False
     if has_executable("mamba"):
         conda_executable = "mamba"
     elif has_executable("conda"):
         conda_executable = "conda"
     elif has_executable("micromamba"):
         conda_executable = "micromamba"
-        used_micromamba = True
     else:
         raise CondaExecutableNotFoundError()
 
@@ -27,7 +25,7 @@ def _get_conda_list_package_versions() -> Dict[str, str]:
 
     # The output format of `conda`/`mamba list` and `micromamba list` are different.
     # See https://github.com/openforcefield/openff-utilities/issues/65
-    if used_micromamba:
+    if conda_executable == "micromamba":
         start_line = 4
     else:
         start_line = 3
