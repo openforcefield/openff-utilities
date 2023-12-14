@@ -10,12 +10,12 @@ def _get_conda_list_package_versions() -> Dict[str, str]:
     from openff.utilities.exceptions import CondaExecutableNotFoundError
     from openff.utilities.utilities import has_executable
 
-    if has_executable("mamba"):
+    if has_executable("micromamba"):
+        conda_executable = "micromamba"
+    elif has_executable("mamba"):
         conda_executable = "mamba"
     elif has_executable("conda"):
         conda_executable = "conda"
-    elif has_executable("micromamba"):
-        conda_executable = "micromamba"
     else:
         raise CondaExecutableNotFoundError()
 
