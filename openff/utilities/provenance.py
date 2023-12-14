@@ -7,12 +7,13 @@ from typing import Dict, Optional
 @functools.lru_cache()
 def _get_conda_list_package_versions() -> Dict[str, str]:
     """Returns the versions of any packages found while executing `conda list`."""
+    import os
+
     from openff.utilities.exceptions import CondaExecutableNotFoundError
     from openff.utilities.utilities import has_executable
 
-    import os
     print([*os.environ["PATH"].split(os.pathsep)])
-    
+
     raise Exception("Trigger")
 
     if has_executable("mamba"):
