@@ -21,11 +21,9 @@ def _get_conda_list_package_versions() -> Dict[str, str]:
 
     output = subprocess.check_output([conda_executable, "list"]).decode().split("\n")
 
-    if conda_executable == "micromamba"
-
-    print(output)
-
-    raise Exception("Trigger")
+    if conda_executable == "micromamba":
+        print(output)
+        raise Exception("Trigger")
 
     package_versions = {}
 
