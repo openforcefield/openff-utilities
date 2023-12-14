@@ -1,5 +1,4 @@
 import functools
-import re
 import subprocess
 from typing import Dict, Optional
 
@@ -19,12 +18,17 @@ def _get_conda_list_package_versions() -> Dict[str, str]:
     else:
         raise CondaExecutableNotFoundError()
 
-    output = subprocess.check_output([conda_executable, "list"]).decode().split("\n")
+    output = list(
+        filter(
+            lambda x: len(x) > 0,
+            subprocess.check_output([conda_executable, "list"]).decode().split("\n"),
+        )
+    )
 
     package_versions = {}
 
     for output_line in output[3:-1]:
-        package_name, package_version, *_ = re.split(" +", output_line)
+        package_name, package_version, *_ = output_line.split()
         package_versions[package_name] = package_version
 
     return package_versions
