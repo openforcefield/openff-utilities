@@ -40,7 +40,7 @@ class MissingOptionalDependencyError(OpenFFError):
                 f"`conda install -c conda-forge {library_name_corrected}`"
             )
 
-        super(MissingOptionalDependencyError, self).__init__(message)
+        super().__init__(message)
 
         self.library_name = library_name
         self.license_issue = license_issue
