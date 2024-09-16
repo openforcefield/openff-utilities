@@ -84,5 +84,5 @@ jobs:
     - name: Look at os.environ and access to /usr/local/bin/micromamba
       run: |
         python -c "import os; print(os.environ['PATH'])"
-        python -c "import os; os.path.isfile('/usr/local/bin/micromamba')"
-        python -c "import os; print(os.access('/usr/local/bin/micromamba', os.X_OK)"
+        python -c "import os; assert os.path.isfile('/usr/local/bin/micromamba')"
+        python -c "import os; assert os.access('/usr/local/bin/micromamba', os.X_OK)"
