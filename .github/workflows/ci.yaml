@@ -89,5 +89,8 @@ jobs:
         echo $PATH
         echo "flag3"
 
+    - name: Look at $PATH and $GITHUB_PATH
+      run: echo $PATH && $GITHUB_PATH
+
     - name: Double-check that the executable exists
       run: which micromamba
