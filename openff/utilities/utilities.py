@@ -133,12 +133,15 @@ def requires_oe_module(
 
 
 def has_executable(program_name: str) -> bool:
-    import os
 
     def _is_executable(fpath: str) -> bool:
-        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+        """Return whether or not shutil.which can find the executable."""
+        import shutil
 
-    fpath, fname = os.path.split(program_name)
+        return shutil.which(fpath) is not None
+
+    fpath, _ = os.path.split(program_name)
+
     if fpath:
         if _is_executable(program_name):
             return True
