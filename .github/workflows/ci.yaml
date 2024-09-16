@@ -36,8 +36,8 @@ jobs:
     - name: Set up conda environment with micromamba
       if: matrix.mamba-executable == 'micromamba'
       uses: mamba-org/setup-micromamba@v1
-      micromamba-binary-path: /Users/runner/.local/bin
       with:
+        micromamba-binary-path: /Users/runner/.local/bin
         environment-file: devtools/conda-envs/test_env.yaml
         create-args: >-
           python=${{ matrix.python-version }}
