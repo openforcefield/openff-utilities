@@ -79,5 +79,15 @@ jobs:
     - name: Look at $PATH
       run: echo $PATH
 
+    - name: Add $MAMBA_EXE to $PATH
+      run: |
+        echo $PATH
+        echo "flag1"
+        echo $MAMBA_EXE
+        echo "flag2"
+        echo "$MAMBA_EXE" >> $GITHUB_PATH
+        echo $PATH
+        echo "flag3"
+
     - name: Double-check that the executable exists
       run: which micromamba
