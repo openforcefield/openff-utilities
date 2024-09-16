@@ -78,14 +78,14 @@ jobs:
       run: ${{ matrix.mamba-executable}} list
 
     - name: Look at $PATH and $GITHUB_PATH (first time)
-      run: echo $PATH && echo $GITHUB_PATH
+      run: echo $PATH && echo $GITHUB_PATH && cat $GITHUB_PATH
 
     - name: Add $MAMBA_EXE to $GITHUB_PATH
       run: |
         export PATH=$PATH:$MAMBA_EXE
 
     - name: Look at $PATH and $GITHUB_PATH (second time)
-      run: echo $PATH && echo $GITHUB_PATH
+      run: echo $PATH && echo $GITHUB_PATH && cat $GITHUB_PATH
 
     - name: Double-check that the executable exists
       run: which micromamba
