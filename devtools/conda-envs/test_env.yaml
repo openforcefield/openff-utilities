@@ -5,11 +5,3 @@ dependencies:
     # Base depends
   - python
   - pip
-  - importlib_resources
-
-    # Testing
-  - pytest
-  - pytest-cov
-  - mypy =1.6
-  - types-setuptools
-  - types-toml

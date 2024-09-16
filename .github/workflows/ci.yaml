@@ -85,7 +85,7 @@ jobs:
         echo "flag1"
         echo $MAMBA_EXE
         echo "flag2"
-        echo "$MAMBA_EXE" >> $GITHUB_PATH
+        echo "$MAMBA_EXE" >> $PATH
         echo $PATH
         echo "flag3"
 
