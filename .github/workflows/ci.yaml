@@ -81,7 +81,7 @@ jobs:
 
     - name: Add $MAMBA_EXE to $GITHUB_PATH
       run: |
-        echo "$MAMBA_EXE" >> $GITHUB_PATH
+        export PATH=$PATH:$MAMBA_EXE
 
     - name: Look at $PATH and $GITHUB_PATH (second time)
       run: echo $PATH && echo $GITHUB_PATH
