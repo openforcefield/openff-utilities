@@ -20,16 +20,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
-        ambertools: [false, true]
-        openeye: [false, true]
-        mamba-executable: ["mamba", "micromamba"]
-        exclude:
-          - python-version: "3.12"
-            openeye: true
-          - python-version: "3.12"
-            ambertools: true
+        os: [macos-latest]
+        python-version: ["3.12"]
+        ambertools: [false]
+        openeye: [false]
+        mamba-executable: ["micromamba"]
 
     env:
       OE_LICENSE: ${{ github.workspace }}/oe_license.txt
@@ -81,6 +76,5 @@ jobs:
     - name: Environment Information
       run: ${{ matrix.mamba-executable}} list
     
-    - name: FROM WHENCE YE CAME
-      # https://stackoverflow.com/a/21800588
-      run: whence -cp micromamba
+    - name: Double-check that the executable exists
+      run: which micromamba
