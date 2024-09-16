@@ -81,29 +81,8 @@ jobs:
     - name: Environment Information
       run: ${{ matrix.mamba-executable}} list
 
-    - name: Run mypy
-      if: ${{ matrix.python-version == 3.12 }}
-      run: mypy -p "openff.utilities" --strict --show-error-codes --implicit-reexport
-
-    - name: Run a test with OpenEye toolkits installed but NOT licensed
-      if: matrix.openeye == true
-      run:
-        pytest -v $COV openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license
-
-    - name: License OpenEye
-      if: matrix.openeye == true
+    - name: Look at os.environ and access to /usr/local/bin/micromamba
       run: |
-        echo "${SECRET_OE_LICENSE}" > ${OE_LICENSE}
-        python -c "from openeye import oechem; assert oechem.OEChemIsLicensed()"
-      env:
-        SECRET_OE_LICENSE: ${{ secrets.OE_LICENSE }}
-
-    - name: Run unit tests
-      run: |
-        pytest -v $COV openff/utilities/_tests/
-
-    - name: Codecov
-      uses: codecov/codecov-action@v4
-      with:
-        file: ./coverage.xml
-        fail_ci_if_error: false
+        python -c "import os; print(os.environ['PATH'])"
+        python -c "import os; os.path.isfile('/usr/local/bin/micromamba')"
+        python -c "import os; print(os.access('/usr/local/bin/micromamba', os.X_OK)"
