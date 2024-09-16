@@ -76,21 +76,15 @@ jobs:
     - name: Environment Information
       run: ${{ matrix.mamba-executable}} list
 
-    - name: Look at $PATH
-      run: echo $PATH
+    - name: Look at $PATH and $GITHUB_PATH (first time)
+      run: echo $PATH && echo $GITHUB_PATH
 
-    - name: Add $MAMBA_EXE to $PATH
+    - name: Add $MAMBA_EXE to $GITHUB_PATH
       run: |
-        echo $PATH
-        echo "flag1"
-        echo $MAMBA_EXE
-        echo "flag2"
-        echo "$MAMBA_EXE" >> $PATH
-        echo $PATH
-        echo "flag3"
+        echo "$MAMBA_EXE" >> $GITHUB_PATH
 
-    - name: Look at $PATH and $GITHUB_PATH
-      run: echo $PATH && $GITHUB_PATH
+    - name: Look at $PATH and $GITHUB_PATH (second time)
+      run: echo $PATH && echo $GITHUB_PATH
 
     - name: Double-check that the executable exists
       run: which micromamba
