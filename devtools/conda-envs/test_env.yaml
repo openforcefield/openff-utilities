@@ -13,3 +13,6 @@ dependencies:
   - mypy =1.6
   - types-setuptools
   - types-toml
+
+    # Shim
+  - mamba
