@@ -37,7 +37,7 @@ jobs:
       if: matrix.mamba-executable == 'micromamba'
       uses: mamba-org/setup-micromamba@v1
       with:
-        micromamba-binary-path: /Users/runner/.local/bin
+        micromamba-binary-path: /Users/runner/.local/bin/micromamba
         environment-file: devtools/conda-envs/test_env.yaml
         create-args: >-
           python=${{ matrix.python-version }}
@@ -76,6 +76,9 @@ jobs:
 
     - name: Environment Information
       run: ${{ matrix.mamba-executable}} list
+
+    - name: Get info
+      run: ls -lha /Users/runner/.local/bin
 
     - name: Look at $PATH and $GITHUB_PATH (first time)
       run: echo $PATH && echo $GITHUB_PATH && cat $GITHUB_PATH
