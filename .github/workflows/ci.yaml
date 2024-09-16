@@ -20,11 +20,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest]
+        os: [macos-latest, macos-12, ubuntu-latest]
         python-version: ["3.12"]
         ambertools: [false]
         openeye: [false]
-        mamba-executable: ["micromamba"]
+        mamba-executable: ["micromamba", "mamba"]
 
     env:
       OE_LICENSE: ${{ github.workspace }}/oe_license.txt
