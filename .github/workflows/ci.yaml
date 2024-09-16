@@ -78,6 +78,4 @@ jobs:
 
     - name: Look at os.environ and access to /usr/local/bin/micromamba
       run: |
-        python -c "import os; print(os.environ['PATH'])"
-        python -c "import pathlib; assert pathlib.Path('/usr/local/bin/micromamba').is_file, 'executable is not file-like'"
-        python -c "import os; assert os.access('/usr/local/bin/micromamba', os.X_OK), 'could not access executable'"
+        python test.py
