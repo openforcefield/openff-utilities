@@ -24,7 +24,7 @@ jobs:
         python-version: ["3.12"]
         ambertools: [false]
         openeye: [false]
-        mamba-executable: ["micromamba", "mamba"]
+        mamba-executable: ["micromamba"]
 
     env:
       OE_LICENSE: ${{ github.workspace }}/oe_license.txt
@@ -75,6 +75,9 @@ jobs:
 
     - name: Environment Information
       run: ${{ matrix.mamba-executable}} list
-    
+
+    - name: Look at $PATH
+      run: echo $PATH
+
     - name: Double-check that the executable exists
       run: which micromamba
