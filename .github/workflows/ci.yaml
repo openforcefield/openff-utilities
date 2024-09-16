@@ -78,7 +78,7 @@ jobs:
       run: ${{ matrix.mamba-executable}} list
 
     - name: Get info
-      run: ls -lha /Users/runner/.local/bin
+      run: ls -lha ~/.local/bin
 
     - name: Look at $PATH and $GITHUB_PATH (first time)
       run: echo $PATH && echo $GITHUB_PATH && cat $GITHUB_PATH
