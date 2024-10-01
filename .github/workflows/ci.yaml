@@ -46,6 +46,8 @@ jobs:
       if: matrix.mamba-executable == 'micromamba'
       uses: mamba-org/setup-micromamba@v1
       with:
+        micromamba-version: '1.5.10-0'
+        micromamba-binary-path: ~/.local/bin/micromamba
         environment-file: devtools/conda-envs/test_env.yaml
         create-args: >-
           python=${{ matrix.python-version }}
@@ -56,7 +58,7 @@ jobs:
       with:
         environment-file: devtools/conda-envs/test_env.yaml
         python-version: ${{ matrix.python-version }}
-        mamba-version: "*"
+        mamba-version: "1.5.10"
   
     - name: Install AmberTools
       if: matrix.ambertools == true
