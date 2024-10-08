@@ -25,15 +25,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12"]
         ambertools: [false, true]
         openeye: [false, true]
         mamba-executable: ["mamba", "micromamba"]
-        exclude:
-          - python-version: "3.12"
-            openeye: true
-          - python-version: "3.12"
-            ambertools: true
 
     env:
       OE_LICENSE: ${{ github.workspace }}/oe_license.txt
