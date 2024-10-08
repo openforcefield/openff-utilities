@@ -39,7 +39,7 @@ jobs:
 
     - name: Set up conda environment with micromamba
       if: matrix.mamba-executable == 'micromamba'
-      uses: mamba-org/setup-micromamba@v1
+      uses: mamba-org/setup-micromamba@v2
       with:
         micromamba-version: '1.5.10-0'
         micromamba-binary-path: ~/.local/bin/micromamba
