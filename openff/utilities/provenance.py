@@ -13,6 +13,8 @@ def _get_conda_list_package_versions() -> dict[str, str]:
         conda_executable = "micromamba"
     elif has_executable("mamba"):
         conda_executable = "mamba"
+    elif has_executable("pixi"):
+        conda_executable = "pixi"
     elif has_executable("conda"):
         conda_executable = "conda"
     else:
