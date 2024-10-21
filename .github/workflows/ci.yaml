@@ -28,7 +28,7 @@ jobs:
         python-version: ["3.10", "3.11", "3.12"]
         ambertools: [false, true]
         openeye: [false, true]
-        mamba-executable: ["mamba", "micromamba"]
+        mamba-executable: ["mamba", "micromamba", "pixi"]
 
     env:
       OE_LICENSE: ${{ github.workspace }}/oe_license.txt
@@ -54,11 +54,26 @@ jobs:
         environment-file: devtools/conda-envs/test_env.yaml
         python-version: ${{ matrix.python-version }}
         mamba-version: "1.5.10"
-  
-    - name: Install AmberTools
-      if: matrix.ambertools == true
+
+    - name: Set up pixi environment (conda replacement)
+      if: matrix.mamba-executable == 'pixi'
+      uses: prefix-dev/setup-pixi@v0.7.0
+      with:
+        manifest-path: devtools/pixi-envs/test_env.toml
+        pixi-version: v0.32.1
+        run-install: true
+        activate-environment: true
+
+    - name: Install AmberTools for everything except pixi
+      if: matrix.ambertools == true && matrix.mamba-executable != pixi
       run: |
         ${{ matrix.mamba-executable}} install --yes -c conda-forge ambertools
+        python -c "from shutil import which; assert which('sqm') is not None"
+
+    - name: Install AmberTools for pixi
+      if: matrix.ambertools == true && matrix.mamba-executable == pixi
+      run: |
+        ${{ matrix.mamba-executable}} add ambertools
         python -c "from shutil import which; assert which('sqm') is not None"
 
     - name: Check AmberTools Missing
@@ -66,10 +81,16 @@ jobs:
       run: |
         python -c "from shutil import which; assert which('sqm') is None"
 
-    - name: Install OpenEye Toolkits
-      if: matrix.openeye == true
+    - name: Install OpenEye Toolkits for everything except pixi
+      if: matrix.openeye == true && matrix.mamba-executable != pixi
       run: |
         ${{ matrix.mamba-executable}} install --yes -c openeye openeye-toolkits
+        python -c "from openeye import oechem"
+
+    - name: Install OpenEye Toolkits for pixi
+      if: matrix.openeye == true && matrix.mamba-executable == pixi
+      run: |
+        ${{ matrix.mamba-executable}} add openeye-toolkits
         python -c "from openeye import oechem"
 
     - name: Check OpenEye Toolkits missing
