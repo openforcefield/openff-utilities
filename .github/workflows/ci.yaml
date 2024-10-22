@@ -65,13 +65,13 @@ jobs:
         activate-environment: true
 
     - name: Install AmberTools for everything except pixi
-      if: matrix.ambertools == true && matrix.mamba-executable != pixi
+      if: matrix.ambertools == true && matrix.mamba-executable != 'pixi'
       run: |
         ${{ matrix.mamba-executable}} install --yes -c conda-forge ambertools
         python -c "from shutil import which; assert which('sqm') is not None"
 
     - name: Install AmberTools for pixi
-      if: matrix.ambertools == true && matrix.mamba-executable == pixi
+      if: matrix.ambertools == true && matrix.mamba-executable == 'pixi'
       run: |
         ${{ matrix.mamba-executable}} add ambertools
         python -c "from shutil import which; assert which('sqm') is not None"
@@ -82,13 +82,13 @@ jobs:
         python -c "from shutil import which; assert which('sqm') is None"
 
     - name: Install OpenEye Toolkits for everything except pixi
-      if: matrix.openeye == true && matrix.mamba-executable != pixi
+      if: matrix.openeye == true && matrix.mamba-executable != 'pixi'
       run: |
         ${{ matrix.mamba-executable}} install --yes -c openeye openeye-toolkits
         python -c "from openeye import oechem"
 
     - name: Install OpenEye Toolkits for pixi
-      if: matrix.openeye == true && matrix.mamba-executable == pixi
+      if: matrix.openeye == true && matrix.mamba-executable == 'pixi'
       run: |
         ${{ matrix.mamba-executable}} add openeye-toolkits
         python -c "from openeye import oechem"
