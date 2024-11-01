@@ -72,7 +72,7 @@ jobs:
       if: matrix.ambertools == true && matrix.mamba-executable == 'pixi'
       run: |
         ${{ matrix.mamba-executable}} add ambertools
-        python -c "from shutil import which; assert which('sqm') is not None"
+        pixi run python -c "from shutil import which; assert which('sqm') is not None"
 
     - name: Check AmberTools Missing
       if: matrix.ambertools == false
