@@ -20,9 +20,7 @@ jobs:
   test:
     name: ${{ matrix.os }}, 🐍=${{ matrix.python-version }}, 🟠=${{ matrix.ambertools }}, 👁️=${{ matrix.openeye }}, 🐉=${{ matrix.mamba-executable }}
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
     strategy:
-      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
         python-version: ["3.10", "3.11", "3.12"]
@@ -125,7 +123,7 @@ jobs:
 
     - name: Run unit tests with pixi
       if: matrix.mamba-executable == 'pixi'
-      run: pixi run pytest -v $COV openff/utilities/_tests/
+      run: pixi run python -m pytest -v $COV openff/utilities/_tests/
 
     - name: Codecov
       uses: codecov/codecov-action@v4
