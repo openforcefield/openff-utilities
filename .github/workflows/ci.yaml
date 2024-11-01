@@ -59,7 +59,7 @@ jobs:
       if: matrix.mamba-executable == 'pixi'
       uses: prefix-dev/setup-pixi@v0.8.1
       with:
-        manifest-path: devtools/pixi-envs/pyproject.toml
+        manifest-path: pyproject.toml
         pixi-version: v0.34.0
         activate-environment: true
 
