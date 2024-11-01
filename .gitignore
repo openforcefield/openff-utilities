@@ -116,3 +116,6 @@ ENV/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+.pixi/
+pixi.lock

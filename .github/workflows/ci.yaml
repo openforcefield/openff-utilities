@@ -20,15 +20,13 @@ jobs:
   test:
     name: ${{ matrix.os }}, 🐍=${{ matrix.python-version }}, 🟠=${{ matrix.ambertools }}, 👁️=${{ matrix.openeye }}, 🐉=${{ matrix.mamba-executable }}
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
     strategy:
-      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.10", "3.11", "3.12"]
+        environment: [py311, py312]
         ambertools: [false, true]
         openeye: [false, true]
-        mamba-executable: ["mamba", "micromamba"]
+        mamba-executable: ["pixi"]
 
     env:
       OE_LICENSE: ${{ github.workspace }}/oe_license.txt
@@ -54,23 +52,44 @@ jobs:
         environment-file: devtools/conda-envs/test_env.yaml
         python-version: ${{ matrix.python-version }}
         mamba-version: "1.5.10"
-  
-    - name: Install AmberTools
-      if: matrix.ambertools == true
+
+    - name: Set up pixi environment (conda replacement)
+      if: matrix.mamba-executable == 'pixi'
+      uses: prefix-dev/setup-pixi@v0.8.1
+      with:
+        manifest-path: pyproject.toml
+        pixi-version: v0.34.0
+        activate-environment: true
+        environments: ${{ matrix.pixi-environments }}
+
+    - name: Install AmberTools for everything except pixi
+      if: matrix.ambertools == true && matrix.mamba-executable != 'pixi'
       run: |
         ${{ matrix.mamba-executable}} install --yes -c conda-forge ambertools
         python -c "from shutil import which; assert which('sqm') is not None"
+
+    - name: Install AmberTools for pixi
+      if: matrix.ambertools == true && matrix.mamba-executable == 'pixi'
+      run: |
+        ${{ matrix.mamba-executable}} add ambertools
+        pixi run python -c "from shutil import which; assert which('sqm') is not None"
 
     - name: Check AmberTools Missing
       if: matrix.ambertools == false
       run: |
         python -c "from shutil import which; assert which('sqm') is None"
 
-    - name: Install OpenEye Toolkits
-      if: matrix.openeye == true
+    - name: Install OpenEye Toolkits for everything except pixi
+      if: matrix.openeye == true && matrix.mamba-executable != 'pixi'
       run: |
         ${{ matrix.mamba-executable}} install --yes -c openeye openeye-toolkits
         python -c "from openeye import oechem"
+
+    - name: Install OpenEye Toolkits for pixi
+      if: matrix.openeye == true && matrix.mamba-executable == 'pixi'
+      run: |
+        ${{ matrix.mamba-executable}} add openeye-toolkits
+        pixi run python -c "from openeye import oechem"
 
     - name: Check OpenEye Toolkits missing
       if: matrix.openeye == false
@@ -99,9 +118,13 @@ jobs:
       env:
         SECRET_OE_LICENSE: ${{ secrets.OE_LICENSE }}
 
-    - name: Run unit tests
-      run: |
-        pytest -v $COV openff/utilities/_tests/
+    - name: Run unit tests with conda/mamba
+      if: matrix.mamba-executable != 'pixi'
+      run: python -m pytest -v $COV openff/utilities/_tests/
+
+    - name: Run unit tests with pixi
+      if: matrix.mamba-executable == 'pixi'
+      run: pixi run python -m pytest -v $COV openff/utilities/_tests/
 
     - name: Codecov
       uses: codecov/codecov-action@v4
