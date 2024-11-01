@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.10", "3.11", "3.12"]
+        environment: [py311, py312]
         ambertools: [false, true]
         openeye: [false, true]
         mamba-executable: ["pixi"]
@@ -60,6 +60,7 @@ jobs:
         manifest-path: pyproject.toml
         pixi-version: v0.34.0
         activate-environment: true
+        environments: ${{ matrix.pixi-environments }}
 
     - name: Install AmberTools for everything except pixi
       if: matrix.ambertools == true && matrix.mamba-executable != 'pixi'
