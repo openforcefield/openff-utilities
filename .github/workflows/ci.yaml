@@ -61,7 +61,6 @@ jobs:
       with:
         manifest-path: devtools/pixi-envs/pyproject.toml
         pixi-version: v0.34.0
-        run-install: true
         activate-environment: true
 
     - name: Install AmberTools for everything except pixi
