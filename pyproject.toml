@@ -1,0 +1,44 @@
+[project]
+name = "openff-utilities"
+authors = [{name = "Open Force Field Initiative", email = "info@openforcefield.org"}]
+description = "Common utilities in the OpenFF software stack"
+dynamic = ["version", "license"]
+dependencies = [
+    "importlib_resources",
+]
+
+[build-system]
+requires = [
+  "setuptools >= 40.9.0",
+  "versioneer[toml]==0.26",
+  "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+[tool.versioneer]
+VCS = "git"
+style = "pep440"
+versionfile_source = "openff/utilities/_version.py"
+versionfile_build = "openff/utilities/_version.py"
+tag_prefix = "v"
+parentdir_prefix = "openff-utilities-"
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-64", "osx-arm64"]
+
+[tool.pixi.dependencies]
+python = "*"
+pip = "*"
+versioneer-518 = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-xdist = "*"
+pytest-randomly = "*"
+nbval = "*"
+mypy = "*"
+types-setuptools = "*"
+types-toml = "*"
+
+[tool.pixi.pypi-dependencies]
+openff-utilities = { path = ".", editable = true }
