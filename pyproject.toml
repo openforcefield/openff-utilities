@@ -24,7 +24,7 @@ tag_prefix = "v"
 parentdir_prefix = "openff-utilities-"
 
 [tool.pixi.project]
-channels = ["conda-forge"]
+channels = ["conda-forge", "openeye"]
 platforms = ["linux-64", "osx-64", "osx-arm64"]
 
 [tool.pixi.dependencies]
