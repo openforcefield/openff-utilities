@@ -119,9 +119,13 @@ jobs:
       env:
         SECRET_OE_LICENSE: ${{ secrets.OE_LICENSE }}
 
-    - name: Run unit tests
-      run: |
-        python -m pytest -v $COV openff/utilities/_tests/
+    - name: Run unit tests with conda/mamba
+      if: matrix.mamba-executable != 'pixi'
+      run: python -m pytest -v $COV openff/utilities/_tests/
+
+    - name: Run unit tests with pixi
+      if: matrix.mamba-executable == 'pixi'
+      run: pixi run pytest -v $COV openff/utilities/_tests/
 
     - name: Codecov
       uses: codecov/codecov-action@v4
