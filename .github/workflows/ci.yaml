@@ -20,9 +20,7 @@ jobs:
   test:
     name: ${{ matrix.os }}, 🐍=${{ matrix.python-version }}, 🟠=${{ matrix.ambertools }}, 👁️=${{ matrix.openeye }}, 🐉=${{ matrix.mamba-executable }}
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
     strategy:
-      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
         python-version: ["3.10", "3.11", "3.12"]
@@ -39,10 +37,8 @@ jobs:
 
     - name: Set up conda environment with micromamba
       if: matrix.mamba-executable == 'micromamba'
-      uses: mamba-org/setup-micromamba@v1
+      uses: mamba-org/setup-micromamba@v2
       with:
-        micromamba-version: '1.5.10-0'
-        micromamba-binary-path: ~/.local/bin/micromamba
         environment-file: devtools/conda-envs/test_env.yaml
         create-args: >-
           python=${{ matrix.python-version }}
@@ -53,7 +49,7 @@ jobs:
       with:
         environment-file: devtools/conda-envs/test_env.yaml
         python-version: ${{ matrix.python-version }}
-        mamba-version: "1.5.10"
+        mamba-version: "*"
   
     - name: Install AmberTools
       if: matrix.ambertools == true
@@ -106,5 +102,7 @@ jobs:
     - name: Codecov
       uses: codecov/codecov-action@v4
       with:
+        token: ${{ secrets.CODECOV_TOKEN }}
         file: ./coverage.xml
-        fail_ci_if_error: false
+        fail_ci_if_error: true
+        disable_search: true
