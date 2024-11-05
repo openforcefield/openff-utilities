@@ -41,7 +41,6 @@ jobs:
       if: matrix.mamba-executable == 'micromamba'
       uses: mamba-org/setup-micromamba@v2
       with:
-        micromamba-version: '1.5.10-0'
         micromamba-binary-path: ~/.local/bin/micromamba
         environment-file: devtools/conda-envs/test_env.yaml
         create-args: >-
