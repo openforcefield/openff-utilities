@@ -49,6 +49,7 @@ jobs:
       with:
         environment-file: devtools/conda-envs/test_env.yaml
         python-version: ${{ matrix.python-version }}
+        mamba-version: "*"
   
     - name: Install AmberTools
       if: matrix.ambertools == true
