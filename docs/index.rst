@@ -11,6 +11,7 @@ Welcome to openff-utilities's documentation!
    :caption: Contents:
 
    getting_started
+   releasehistory
    api
 
 

@@ -37,10 +37,8 @@ jobs:
 
     - name: Set up conda environment with micromamba
       if: matrix.mamba-executable == 'micromamba'
-      uses: mamba-org/setup-micromamba@v1
+      uses: mamba-org/setup-micromamba@v2
       with:
-        micromamba-version: '1.5.10-0'
-        micromamba-binary-path: ~/.local/bin/micromamba
         environment-file: devtools/conda-envs/test_env.yaml
         create-args: >-
           python=${{ matrix.python-version }}
@@ -51,7 +49,6 @@ jobs:
       with:
         environment-file: devtools/conda-envs/test_env.yaml
         python-version: ${{ matrix.python-version }}
-        mamba-version: "1.5.10"
 
     - name: Set up pixi environment (conda replacement)
       if: matrix.mamba-executable == 'pixi'
@@ -118,6 +115,7 @@ jobs:
       env:
         SECRET_OE_LICENSE: ${{ secrets.OE_LICENSE }}
 
+<<<<<<< HEAD
     - name: Run unit tests with conda/mamba
       if: matrix.mamba-executable != 'pixi'
       run: python -m pytest -v $COV openff/utilities/_tests/
@@ -125,9 +123,17 @@ jobs:
     - name: Run unit tests with pixi
       if: matrix.mamba-executable == 'pixi'
       run: pixi run python -m pytest -v $COV openff/utilities/_tests/
+=======
+    - name: Run unit tests
+      run: |
+        pytest -v $COV openff/utilities/_tests/ -m leaky
+        pytest -v $COV openff/utilities/_tests/ -m "not leaky"
+>>>>>>> upstream/main
 
     - name: Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
-        file: ./coverage.xml
-        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
+        fail_ci_if_error: true
+        disable_search: true
