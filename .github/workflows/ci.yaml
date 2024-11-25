@@ -12,10 +12,6 @@ on:
     - cron: "0 7 * * *"
   workflow_dispatch:
 
-defaults:
-  run:
-    shell: bash -leo pipefail {0} {0}
-
 jobs:
   test:
     name: ${{ matrix.os }}, 🐍=${{ matrix.python-version }}, 🟠=${{ matrix.ambertools }}, 👁️=${{ matrix.openeye }}, 🐉=${{ matrix.mamba-executable }}
