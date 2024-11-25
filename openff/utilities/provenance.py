@@ -13,12 +13,14 @@ def _get_conda_list_package_versions() -> dict[str, str]:
     from openff.utilities.utilities import has_executable
     from openff.utilities.warnings import CondaExecutableNotFoundWarning
 
-    if has_executable("micromamba"):
-        conda_executable = "micromamba"
+    if has_executable("pixi"):
+        conda_command = "pixi list --color never"
+    elif has_executable("micromamba"):
+        conda_command = "micromamba list"
     elif has_executable("mamba"):
-        conda_executable = "mamba"
+        conda_command = "mamba list"
     elif has_executable("conda"):
-        conda_executable = "conda"
+        conda_command = "conda list"
     else:
         warnings.warn(
             "No conda/mamba/micromamba executable found. Unable to determine package versions.",
@@ -29,16 +31,18 @@ def _get_conda_list_package_versions() -> dict[str, str]:
     output = list(
         filter(
             lambda x: len(x) > 0,
-            subprocess.check_output([conda_executable, "list"]).decode().split("\n"),
+            subprocess.check_output(conda_command.split()).decode().split("\n"),
         )
     )
 
     package_versions = {}
 
-    for output_line in output[3:-1]:
+    # pixi has a brief header, others list "here's the path", etc
+    for output_line in output[3 - has_executable("pixi") * 2 : -1]:
         # The output format of `conda`/`mamba list` and `micromamba list` are different.
         # See https://github.com/openforcefield/openff-utilities/issues/65
         package_name, package_version, *_ = output_line.split()
+
         package_versions[package_name] = package_version
 
     return package_versions
