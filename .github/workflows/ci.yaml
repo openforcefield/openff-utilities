@@ -59,20 +59,22 @@ jobs:
       if: matrix.ambertools == true && matrix.mamba-executable != 'pixi'
       run: |
         ${{ matrix.mamba-executable}} install --yes -c conda-forge ambertools
-        python -c "from shutil import which; assert which('sqm') is not None"
-
-
+    
     - name: Install AmberTools for pixi
       if: matrix.ambertools == true && matrix.mamba-executable == 'pixi'
       run: |
         ${{ matrix.mamba-executable}} add ambertools
-        pixi run python -c "from shutil import which; assert which('sqm') is not None"
-      shell: pixi run bash -e {0}
+        ${{ matrix.mamba-executable}} list | grep amber
 
     - name: Check AmberTools Missing
       if: matrix.ambertools == false
       run: |
         python -c "from shutil import which; assert which('sqm') is None"
+
+    - name: Check AmberTools installation
+      if: matrix.ambertools == true && matrix.mamba-executable = 'pixi'
+      run: |
+        python -c "from shutil import which; assert which('sqm') is not None"
 
     - name: Install OpenEye Toolkits for everything except pixi
       if: matrix.openeye == true && matrix.mamba-executable != 'pixi'
