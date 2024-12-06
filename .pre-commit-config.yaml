@@ -1,27 +1,15 @@
 ci:
-  autoupdate_schedule: "monthly"
+  autoupdate_schedule: "quarterly"
+files: ^openff|(^examples/((?!deprecated).)*$)|^docs|(^utilities/((?!deprecated).)*$)
 repos:
-- repo: https://github.com/psf/black
-  rev: 24.10.0
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.8.2
   hooks:
-  - id: black
-    files: ^openff
-  - id: black-jupyter
-    files: ^examples/((?!deprecated).)*$
-- repo: https://github.com/PyCQA/isort
-  rev: 5.13.2
+    - id: ruff
+      args: [--fix]
+    - id: ruff-format
+- repo: https://github.com/adamchainz/blacken-docs
+  rev: 1.19.1
   hooks:
-  - id: isort
-    files: ^openff
-- repo: https://github.com/PyCQA/flake8
-  rev: 7.1.1
-  hooks:
-  - id: flake8
-    files: ^openff
-- repo: https://github.com/asottile/pyupgrade
-  rev: v3.19.0
-  hooks:
-  - id: pyupgrade
-    files: ^openff|plugins|stubs
-    exclude: openff/utilities/_version.py|setup.py
-    args: ["--py39-plus"]
+    - id: blacken-docs
+      files: ^docs/.*\.(rst|md)$

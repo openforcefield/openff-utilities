@@ -60,9 +60,7 @@ def test_get_data_file_path():
     """
 
     # Test a path which should exist.
-    data_file_path = get_data_file_path(
-        "data/data.dat", package_name="openff.utilities"
-    )
+    data_file_path = get_data_file_path("data/data.dat", package_name="openff.utilities")
     assert os.path.isfile(data_file_path)
 
     # Ensure a double-checking through data/ takes place
@@ -86,9 +84,7 @@ def test_temporary_cd():
     # Move to the parent directory
     with temporary_cd(os.pardir):
         current_directory = os.getcwd()
-        expected_directory = os.path.abspath(
-            os.path.join(original_directory, os.pardir)
-        )
+        expected_directory = os.path.abspath(os.path.join(original_directory, os.pardir))
 
         assert compare_paths(current_directory, expected_directory)
 
@@ -143,9 +139,7 @@ def test_requires_package():
 
 
 @skip_if_missing("openeye.oechem")
-@pytest.mark.skipif(
-    "OE_LICENSE" not in os.environ, reason="Requires an OpenEye license is NOT set up"
-)
+@pytest.mark.skipif("OE_LICENSE" not in os.environ, reason="Requires an OpenEye license is NOT set up")
 def test_requires_oe_module():
     """Tests that the ``requires_package`` utility behaves as expected when an OpenEye license is set up."""
 
@@ -155,13 +149,9 @@ def test_requires_oe_module():
     requires_oe_module("oechem")(dummy_function)()
 
 
-@pytest.mark.parametrize(
-    "oe_module", ["oechem", "oeiupac", "oeomega", "oequacpac", "oedepict"]
-)
+@pytest.mark.parametrize("oe_module", ["oechem", "oeiupac", "oeomega", "oequacpac", "oedepict"])
 @skip_if_missing("openeye")
-@pytest.mark.skipif(
-    "OE_LICENSE" in os.environ, reason="Requires an OpenEye license is NOT set up"
-)
+@pytest.mark.skipif("OE_LICENSE" in os.environ, reason="Requires an OpenEye license is NOT set up")
 def test_requires_oe_module_installed_missing_license(oe_module):
     """Tests that the ``requires_package`` utility behaves as expected while OpenEye toolkits are
     installed but no OpenEye license is set up."""
@@ -176,9 +166,7 @@ def test_requires_oe_module_installed_missing_license(oe_module):
     assert "conda-forge" not in str(error_info.value)
 
 
-@pytest.mark.skipif(
-    has_package("openeye.oechem"), reason="Requires OpenEye toolkits are NOT installed"
-)
+@pytest.mark.skipif(has_package("openeye.oechem"), reason="Requires OpenEye toolkits are NOT installed")
 def test_requires_oe_module_not_installed():
     """Tests that the ``requires_package`` utility behaves as expected while OpenEye toolkits are
     installed."""
