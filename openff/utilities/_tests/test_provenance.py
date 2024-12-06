@@ -22,9 +22,9 @@ def test_conda_unavailable_returns_empty_dict(monkeypatch):
     This test leaks! Do not run it alongside other tests! Select either it "pytest -m leaky"
     or avoid it "pytest -m 'not leaky'"
     """
-    with monkeypatch.context() as m, pytest.warns(
-        CondaExecutableNotFoundWarning,
-        match="No .* executable found",
+    with (
+        monkeypatch.context() as m,
+        pytest.warns(CondaExecutableNotFoundWarning, match="No .* executable found"),
     ):
         import openff.utilities.utilities
 

@@ -1,0 +1,56 @@
+[build-system]
+requires = [
+    "setuptools",
+    "versioningit",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="openff-utilities"
+description = "A collection of miscellaneous utility functions used throughout the OpenFF stack"
+readme = "README.md"
+authors = [{name = "Open Force Field Initiative", email = "info@openforcefield.org"}]
+license = {text = "MIT"}
+dynamic = ["version"]
+
+[tool.setuptools.packages]
+find = {}
+
+[tool.versioningit]
+
+[tool.ruff]
+line-length = 119
+namespace-packages = ["openff/utilities/"]
+
+[tool.ruff.lint]
+select = ["F", "E", "W", "NPY", "UP", "RUF", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+"openff/utilities/__init__.py" = ["F401"]
+
+[tool.mypy]
+exclude="openff/utilities/_tests"
+python_version = "3.12"
+warn_unused_configs = true
+warn_unused_ignores = true
+show_error_codes = true
+strict = true
+
+[tool.pytest.ini_options]
+markers = [
+    "leaky: run leaky tests",
+]
+addopts = "--cov=openff/utilities --cov-report=xml -m \"not leaky\""
+
+[tool.coverage.run]
+omit = [
+    "*/*/_tests/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "@overload",
+]
