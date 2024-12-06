@@ -107,7 +107,7 @@ def requires_oe_module(
     def inner_decorator(function: F) -> F:
         @requires_package(f"openeye.{module_name}")
         @wraps(function)
-        def wrapper(*args, **kwargs):  # type: ignore
+        def wrapper(*args, **kwargs):  # type: ignore[no-untyped-def]
             oe_module = importlib.import_module(f"openeye.{module_name}")
 
             license_functions = {
