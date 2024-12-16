@@ -1,0 +1,99 @@
+name: CI (with pixi)
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+  schedule:
+    # At 09:00 UTC on Monday and Thursday.
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: ${{ matrix.os }}, 🐍=${{ matrix.environment}}, 🟠=${{ matrix.ambertools }}, 👁️=${{ matrix.openeye }}, 🐉=${{ matrix.mamba-executable }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        environment: [py310, py311, py312]
+        ambertools: [false, true]
+        openeye: [false, true]
+        mamba-executable: ["pixi"]
+
+    env:
+      OE_LICENSE: ${{ github.workspace }}/oe_license.txt
+      COV: --cov=openff/utilities --cov-report=xml --cov-config=setup.cfg --cov-append
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up environment with pixi
+      if: matrix.mamba-executable == 'pixi'
+      uses: prefix-dev/setup-pixi@v0.8.1
+      with:
+        manifest-path: pyproject.toml
+        pixi-version: v0.34.0
+        activate-environment: true
+        environments: ${{ matrix.environment }}
+
+    - name: Install AmberTools
+      if: matrix.ambertools == true && matrix.mamba-executable == 'pixi'
+      run: |
+        ${{ matrix.mamba-executable}} add ambertools
+        ${{ matrix.mamba-executable}} list | grep amber
+
+    - name: Check AmberTools Missing
+      if: matrix.ambertools == false && matrix.mamba-executable == 'pixi'
+      run: python -c "from shutil import which; assert which('sqm') is None"
+
+    - name: Check AmberTools installation
+      # This needs to be in a different step, at least for how I currently understand pixi
+      if: matrix.ambertools == true && matrix.mamba-executable == 'pixi'
+      run: python -c "from shutil import which; assert which('sqm') is not None"
+
+    - name: Install OpenEye Toolkits
+      if: matrix.openeye == true && matrix.mamba-executable == 'pixi'
+      run: |
+        ${{ matrix.mamba-executable}} add openeye-toolkits
+        pixi run python -c "from openeye import oechem"
+
+    - name: Check OpenEye Toolkits missing
+      if: matrix.openeye == false
+      run: python devtools/scripts/assert_openeye_not_found.py
+
+    - name: Install package
+      run: python -m pip install -e .
+
+    - name: Environment Information
+      run: ${{ matrix.mamba-executable}} list
+
+    - name: Run a test with OpenEye toolkits installed but NOT licensed
+      if: matrix.openeye == true
+      run:
+        pytest -v $COV openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license
+
+    - name: License OpenEye
+      if: matrix.openeye == true
+      run: |
+        echo "${SECRET_OE_LICENSE}" > ${OE_LICENSE}
+        python -c "from openeye import oechem; assert oechem.OEChemIsLicensed()"
+      env:
+        SECRET_OE_LICENSE: ${{ secrets.OE_LICENSE }}
+
+    - name: Run unit tests
+      if: matrix.mamba-executable == 'pixi'
+      run: |
+        pixi run pytest -v $COV openff/utilities/_tests/ -m leaky
+        pixi run pytest -v $COV openff/utilities/_tests/ -m "not leaky"
+
+    - name: Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
+        fail_ci_if_error: true
+        disable_search: true

@@ -7,17 +7,11 @@ import versioneer
 
 short_description = __doc__.split("\n")
 
-with open("README.md", "r") as handle:
-    long_description = handle.read()
-
-
 setup(
     name='openff-utilities',
     author='The Open Force Field Initiative',
     author_email='info@openforcefield.org',
-    description=short_description[0],
-    long_description=long_description,
-    long_description_content_type="text/markdown",
+    description=__doc__.split("\n"),
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     license='MIT',
