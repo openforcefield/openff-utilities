@@ -1,27 +1,59 @@
-[project]
-name = "openff-utilities"
-authors = [{name = "Open Force Field Initiative", email = "info@openforcefield.org"}]
-description = "Common utilities in the OpenFF software stack"
-dynamic = ["version", "license"]
-dependencies = [
-    "importlib_resources",
-]
-
 [build-system]
 requires = [
-  "setuptools >= 40.9.0",
-  "versioneer[toml]==0.26",
-  "wheel",
+    "setuptools",
+    "versioningit",
 ]
 build-backend = "setuptools.build_meta"
 
-[tool.versioneer]
-VCS = "git"
-style = "pep440"
-versionfile_source = "openff/utilities/_version.py"
-versionfile_build = "openff/utilities/_version.py"
-tag_prefix = "v"
-parentdir_prefix = "openff-utilities-"
+[project]
+name = "openff-utilities"
+description = "A collection of miscellaneous utility functions used throughout the OpenFF stack"
+readme = "README.md"
+authors = [{name = "Open Force Field Initiative", email = "info@openforcefield.org"}]
+license = {text = "MIT"}
+dynamic = ["version"]
+
+[tool.setuptools.packages]
+find = {}
+
+[tool.versioningit]
+
+[tool.ruff]
+line-length = 119
+namespace-packages = ["openff/utilities/"]
+
+[tool.ruff.lint]
+select = ["F", "E", "W", "NPY", "UP", "RUF", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+"openff/utilities/__init__.py" = ["F401"]
+
+[tool.mypy]
+exclude="openff/utilities/_tests"
+python_version = "3.12"
+warn_unused_configs = true
+warn_unused_ignores = true
+show_error_codes = true
+strict = true
+
+[tool.pytest.ini_options]
+markers = [
+    "leaky: run leaky tests",
+]
+addopts = "--cov=openff/utilities --cov-report=xml -m \"not leaky\""
+
+[tool.coverage.run]
+omit = [
+    "*/*/_tests/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "@overload",
+]
 
 [tool.pixi.project]
 channels = ["conda-forge", "openeye"]
@@ -30,7 +62,7 @@ platforms = ["linux-64", "osx-64", "osx-arm64"]
 [tool.pixi.dependencies]
 python = "*"
 pip = "*"
-versioneer-518 = "*"
+versioningit = "*"
 pytest = "*"
 pytest-cov = "*"
 pytest-xdist = "*"
