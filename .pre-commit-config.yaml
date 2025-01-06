@@ -19,7 +19,7 @@ repos:
   - id: flake8
     files: ^openff
 - repo: https://github.com/asottile/pyupgrade
-  rev: v3.19.0
+  rev: v3.19.1
   hooks:
   - id: pyupgrade
     files: ^openff|plugins|stubs
