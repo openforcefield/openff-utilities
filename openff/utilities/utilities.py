@@ -121,9 +121,7 @@ def requires_oe_module(
             is_licensed = getattr(oe_module, license_functions[module_name])()
 
             if not is_licensed:
-                raise MissingOptionalDependencyError(
-                    library_name=f"openeye.{module_name}", license_issue=True
-                )
+                raise MissingOptionalDependencyError(library_name=f"openeye.{module_name}", license_issue=True)
 
             return function(*args, **kwargs)
 
@@ -217,16 +215,14 @@ def get_data_dir_path(relative_path: str, package_name: str) -> str:
     """
     from importlib_resources import files
 
-    dir_path: "Path" = files(package_name) / relative_path
+    dir_path: Path = files(package_name) / relative_path
 
     if dir_path.is_dir():
         pass
     elif (files(package_name) / "data" / relative_path).is_dir():
         dir_path = files(package_name) / "data" / relative_path
     else:
-        raise NotADirectoryError(
-            f"Directory {relative_path} not found in {package_name}."
-        )
+        raise NotADirectoryError(f"Directory {relative_path} not found in {package_name}.")
 
     return dir_path.as_posix()
 
@@ -261,7 +257,7 @@ def get_data_file_path(relative_path: str, package_name: str) -> str:
     """
     from importlib_resources import files
 
-    file_path: "Path" = files(package_name) / relative_path
+    file_path: Path = files(package_name) / relative_path
 
     if not file_path.is_file():
         try_path = files(package_name) / f"data/{relative_path}"

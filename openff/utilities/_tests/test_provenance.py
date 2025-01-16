@@ -22,9 +22,9 @@ def test_conda_unavailable_returns_empty_dict(monkeypatch):
     This test leaks! Do not run it alongside other tests! Select either it "pytest -m leaky"
     or avoid it "pytest -m 'not leaky'"
     """
-    with monkeypatch.context() as m, pytest.warns(
-        CondaExecutableNotFoundWarning,
-        match="No .* executable found",
+    with (
+        monkeypatch.context() as m,
+        pytest.warns(CondaExecutableNotFoundWarning, match="No .* executable found"),
     ):
         import openff.utilities.utilities
 
@@ -46,9 +46,9 @@ def test_conda_available_get_ambertools_version_found():
     # parmed package), however it's currently broken on ARM macs.
     pytest.importorskip("parmed")
 
-    assert (
-        get_ambertools_version() is not None
-    ), f"note that len of package versions is {len(_get_conda_list_package_versions())}"
+    assert get_ambertools_version() is not None, (
+        f"note that len of package versions is {len(_get_conda_list_package_versions())}"
+    )
 
 
 def test_conda_available_get_ambertools_version_not_found():
