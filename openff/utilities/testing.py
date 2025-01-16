@@ -43,7 +43,7 @@ def skip_if_missing_exec(exec: Union[str, list[str]]) -> "MarkDecorator":
     elif isinstance(exec, list):
         execs = exec
     else:
-        raise ValueError("Bad type passed to skip_if_missing_exec. " f"Found type {type(exec)}")
+        raise ValueError(f"Bad type passed to skip_if_missing_exec. Found type {type(exec)}")
 
     found_exec = False
     for exec_ in execs:

@@ -46,9 +46,9 @@ def test_conda_available_get_ambertools_version_found():
     # parmed package), however it's currently broken on ARM macs.
     pytest.importorskip("parmed")
 
-    assert (
-        get_ambertools_version() is not None
-    ), f"note that len of package versions is {len(_get_conda_list_package_versions())}"
+    assert get_ambertools_version() is not None, (
+        f"note that len of package versions is {len(_get_conda_list_package_versions())}"
+    )
 
 
 def test_conda_available_get_ambertools_version_not_found():

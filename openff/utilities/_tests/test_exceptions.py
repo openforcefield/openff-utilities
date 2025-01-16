@@ -6,7 +6,7 @@ from openff.utilities.exceptions import MissingOptionalDependencyError, OpenFFEr
 def test_exceptions():
     with pytest.raises(
         MissingOptionalDependencyError,
-        match="The required foobar module could not be imported.*" "Try installing.*conda-forge.*",
+        match="The required foobar module could not be imported.*Try installing.*conda-forge.*",
     ):
         raise MissingOptionalDependencyError(library_name="foobar")
 
