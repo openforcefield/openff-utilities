@@ -43,14 +43,12 @@ def skip_if_missing_exec(exec: Union[str, list[str]]) -> "MarkDecorator":
     elif isinstance(exec, list):
         execs = exec
     else:
-        raise ValueError(
-            "Bad type passed to skip_if_missing_exec. " f"Found type {type(exec)}"
-        )
+        raise ValueError(f"Bad type passed to skip_if_missing_exec. Found type {type(exec)}")
 
     found_exec = False
     for exec_ in execs:
         found_exec = found_exec or has_executable(exec_)
 
-    reason = f"Package {str(exec)} is required, but was not found."
+    reason = f"Package {exec!s} is required, but was not found."
     mark = pytest.mark.skipif(not found_exec, reason=reason)
     return mark
