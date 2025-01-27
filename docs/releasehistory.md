@@ -11,8 +11,19 @@ Dates are given in YYYY-MM-DD format.
 
 Please note that all releases prior to a version 1.0.0 are considered pre-releases and many API changes will come before a stable release.
 
-## Current development
+## 0.1.14 - 2025-01-27
+
+### New features
+
+* #90: Add support for `pixi` when fetching package versions in virtual environments
+
+### Maintenance changes
+
+* #95: Test on Python 3.13
+* #94: Consolidate Python config files
+
+## 0.1.13 - 2024-12-02
 
 ### Breaking changes and behavior changes
 
-* Failures to call `conda` or similar executables now raise a warning (`CondaExecutableNotFoundWarning`) instead of an exception (`CondaExecutableNotFoundError`)
+* #92: Failures to call `conda` or similar executables now raise a warning (`CondaExecutableNotFoundWarning`) instead of an exception (`CondaExecutableNotFoundError`)
