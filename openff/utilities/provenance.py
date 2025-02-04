@@ -41,6 +41,8 @@ def _get_conda_list_package_versions() -> dict[str, str]:
     for output_line in output[3 - has_executable("pixi") * 2 : -1]:
         # The output format of `conda`/`mamba list` and `micromamba list` are different.
         # See https://github.com/openforcefield/openff-utilities/issues/65
+        # Some setups may also have even more custom headers, which could cause this to bubble up a ValueError.
+        # See https://github.com/openforcefield/openff-utilities/issues/41
         package_name, package_version, *_ = output_line.split()
 
         package_versions[package_name] = package_version
@@ -59,4 +61,18 @@ def get_ambertools_version() -> Optional[str]:
             still returns `None`, but without a warning associated with the above failure.
     """
 
-    return _get_conda_list_package_versions().get("ambertools", None)
+    try:
+        return _get_conda_list_package_versions().get("ambertools", None)
+    except (
+        ValueError,  # Issue 98
+        subprocess.CalledProcessError,  # Issue 101
+    ):
+        from openff.utilities.warnings import CondaExecutableNotFoundWarning
+
+        warnings.warn(
+            "Something went wrong parsing the output of `conda list` or similar. Unable to "
+            "determine AmberTools version, returning None.",
+            CondaExecutableNotFoundWarning,
+        )
+
+        return None
