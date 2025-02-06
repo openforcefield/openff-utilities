@@ -1,1 +1,1 @@
-from openff.utilities import *
+from openff.utilities import *  # noqa: F403
