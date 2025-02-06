@@ -32,9 +32,6 @@ def compare_paths(path_1: str, path_2: str) -> bool:
     return os.path.normpath(path_1) == os.path.normpath(path_2)
 
 
-def test_star_import():
-    from openff.utilities import *
-
 def test_get_data_dir_path():
     """Tests that the `get_data_dir_path` can correctly find
     data directories.
