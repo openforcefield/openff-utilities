@@ -14,8 +14,8 @@ from openff.utilities.utilities import (
 
 __all__ = (
     "MissingOptionalDependencyError",
+    "get_ambertools_version",
     "get_data_file_path",
-    "get_versions",
     "has_executable",
     "has_package",
     "requires_oe_module",
