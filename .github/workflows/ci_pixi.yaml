@@ -35,7 +35,7 @@ jobs:
 
     - name: Set up environment with pixi
       if: matrix.mamba-executable == 'pixi'
-      uses: prefix-dev/setup-pixi@v0.8.1
+      uses: prefix-dev/setup-pixi@v0.8.3
       with:
         manifest-path: pyproject.toml
         pixi-version: v0.34.0
@@ -76,7 +76,7 @@ jobs:
     - name: Run a test with OpenEye toolkits installed but NOT licensed
       if: matrix.openeye == true
       run:
-        pytest -v $COV openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license
+        pytest $COV openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license
 
     - name: License OpenEye
       if: matrix.openeye == true
@@ -89,8 +89,8 @@ jobs:
     - name: Run unit tests
       if: matrix.mamba-executable == 'pixi'
       run: |
-        pixi run pytest -v $COV openff/utilities/_tests/ -m leaky
-        pixi run pytest -v $COV openff/utilities/_tests/ -m "not leaky"
+        pixi run pytest $COV openff/utilities/_tests/ -m leaky
+        pixi run pytest $COV openff/utilities/_tests/ -m "not leaky"
 
     - name: Codecov
       uses: codecov/codecov-action@v5

@@ -35,6 +35,7 @@ jobs:
 
     env:
       OE_LICENSE: ${{ github.workspace }}/oe_license.txt
+      COV: --cov=openff/utilities --cov-report=xml --cov-append
 
     steps:
     - uses: actions/checkout@v4
@@ -91,7 +92,7 @@ jobs:
     - name: Run a test with OpenEye toolkits installed but NOT licensed
       if: matrix.openeye == true
       run:
-        pytest -v openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license
+        pytest $COV openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license
 
     - name: License OpenEye
       if: matrix.openeye == true
@@ -103,8 +104,8 @@ jobs:
 
     - name: Run unit tests
       run: |
-        pytest -v openff/utilities/_tests/ -m leaky
-        pytest -v openff/utilities/_tests/ -m "not leaky"
+        pytest $COV openff/utilities/_tests/ -m leaky
+        pytest $COV openff/utilities/_tests/ -m "not leaky"
 
     - name: Codecov
       uses: codecov/codecov-action@v5
