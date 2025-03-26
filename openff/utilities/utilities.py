@@ -6,12 +6,9 @@ from contextlib import contextmanager
 from functools import wraps
 from importlib.resources import as_file, files
 from tempfile import TemporaryDirectory
-from typing import TYPE_CHECKING, Any, Callable, Literal, Optional, TypeVar
+from typing import Any, Callable, Literal, Optional, TypeVar
 
 from openff.utilities.exceptions import MissingOptionalDependencyError
-
-if TYPE_CHECKING:
-    pass
 
 # https://mypy.readthedocs.io/en/stable/generics.html#declaring-decorators
 
@@ -214,7 +211,7 @@ def get_data_dir_path(relative_path: str, package_name: str) -> str:
     get_data_file_path, for getting the path to a particular file in a data directory.
 
     """
-    with as_file(files(package_name)) as dir_path:
+    with as_file(files(package_name) / relative_path) as dir_path:
         if dir_path.is_dir():
             return dir_path.as_posix()
 

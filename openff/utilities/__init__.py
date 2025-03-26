@@ -4,6 +4,7 @@ from openff.utilities.exceptions import MissingOptionalDependencyError
 from openff.utilities.provenance import get_ambertools_version
 from openff.utilities.testing import skip_if_missing, skip_if_missing_exec
 from openff.utilities.utilities import (
+    get_data_dir_path,
     get_data_file_path,
     has_executable,
     has_package,
@@ -15,7 +16,7 @@ from openff.utilities.utilities import (
 __all__ = (
     "MissingOptionalDependencyError",
     "get_ambertools_version",
-    "get_data_file_path",
+    "get_data_dir_path",
     "has_executable",
     "has_package",
     "requires_oe_module",
