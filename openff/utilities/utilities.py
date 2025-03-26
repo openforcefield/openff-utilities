@@ -213,7 +213,7 @@ def get_data_dir_path(relative_path: str, package_name: str) -> str:
     get_data_file_path, for getting the path to a particular file in a data directory.
 
     """
-    from importlib_resources import files
+    from importlib.resources import files
 
     dir_path: Path = files(package_name) / relative_path
 
@@ -255,7 +255,7 @@ def get_data_file_path(relative_path: str, package_name: str) -> str:
     get_data_dir_path, for getting the path to a directory instead of an individual file.
 
     """
-    from importlib_resources import files
+    from importlib.resources import files
 
     file_path: Path = files(package_name) / relative_path
 
