@@ -4,13 +4,11 @@ import os
 from collections.abc import Generator
 from contextlib import contextmanager
 from functools import wraps
+from importlib.resources import as_file, files
 from tempfile import TemporaryDirectory
-from typing import TYPE_CHECKING, Any, Callable, Literal, Optional, TypeVar
+from typing import Any, Callable, Literal, Optional, TypeVar
 
 from openff.utilities.exceptions import MissingOptionalDependencyError
-
-if TYPE_CHECKING:
-    from pathlib import Path
 
 # https://mypy.readthedocs.io/en/stable/generics.html#declaring-decorators
 
@@ -213,18 +211,15 @@ def get_data_dir_path(relative_path: str, package_name: str) -> str:
     get_data_file_path, for getting the path to a particular file in a data directory.
 
     """
-    from importlib_resources import files
+    with as_file(files(package_name) / relative_path) as dir_path:
+        if dir_path.is_dir():
+            return dir_path.as_posix()
 
-    dir_path: Path = files(package_name) / relative_path
+    with as_file(files(package_name) / "data" / relative_path) as dir_path:
+        if dir_path.is_dir():
+            return dir_path.as_posix()
 
-    if dir_path.is_dir():
-        pass
-    elif (files(package_name) / "data" / relative_path).is_dir():
-        dir_path = files(package_name) / "data" / relative_path
-    else:
-        raise NotADirectoryError(f"Directory {relative_path} not found in {package_name}.")
-
-    return dir_path.as_posix()
+    raise NotADirectoryError(f"Directory {relative_path} not found in {package_name}.")
 
 
 def get_data_file_path(relative_path: str, package_name: str) -> str:
@@ -255,15 +250,12 @@ def get_data_file_path(relative_path: str, package_name: str) -> str:
     get_data_dir_path, for getting the path to a directory instead of an individual file.
 
     """
-    from importlib_resources import files
+    with as_file(files(package_name) / relative_path) as file_path:
+        if file_path.is_file():
+            return file_path.as_posix()
 
-    file_path: Path = files(package_name) / relative_path
+    with as_file(files(package_name) / "data" / relative_path) as file_path:
+        if file_path.is_file():
+            return file_path.as_posix()
 
-    if not file_path.is_file():
-        try_path = files(package_name) / f"data/{relative_path}"
-        if try_path.is_file():
-            file_path = try_path
-        else:
-            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_path)
-
-    return file_path.as_posix()
+    raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_path)
