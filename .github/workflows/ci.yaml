@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.11", "3.12", "3.13"]
         ambertools: [false, true]
         openeye: [false, true]
         mamba-executable: ["micromamba"]  # TODO: Add "mamba" back

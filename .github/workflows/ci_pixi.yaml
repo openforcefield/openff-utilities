@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        environment: [py310, py311, py312]
+        environment: [py311, py312]
         ambertools: [false, true]
         openeye: [false, true]
         mamba-executable: ["pixi"]
