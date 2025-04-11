@@ -15,7 +15,7 @@ Please note that all releases prior to a version 1.0.0 are considered pre-releas
 
 ### Breaking changes
 
-* #108: Drop support for Python 3.10
+* #113: Drop support for Python 3.10
 
 ## 0.1.14 - 2025-01-27
 
