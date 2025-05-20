@@ -1,4 +1,6 @@
 import functools
+import json
+import os
 import subprocess
 import warnings
 from typing import Optional
@@ -10,17 +12,14 @@ def _get_conda_list_package_versions() -> dict[str, str]:
     Returns the versions of any packages found while executing `conda list`.
     If no conda executable is found, emits CondaExecutableNotFoundWarning
     """
-    from openff.utilities.utilities import has_executable
     from openff.utilities.warnings import CondaExecutableNotFoundWarning
 
-    if has_executable("pixi"):
-        conda_command = "pixi list --color never"
-    elif has_executable("micromamba"):
-        conda_command = "micromamba list"
-    elif has_executable("mamba"):
-        conda_command = "mamba list"
-    elif has_executable("conda"):
-        conda_command = "conda list"
+    if os.environ.get("PIXI_IN_SHELL") == "1":
+        conda_command = "{} list --json".format(os.environ["PIXI_EXE"])
+    elif os.environ.get("CONDA_SHLVL") == "1" and os.environ.get("CONDA_EXE"):
+        conda_command = "{} list --json".format(os.environ["CONDA_EXE"])
+    elif os.environ.get("CONDA_SHLVL") == "1" and os.environ.get("MAMBA_EXE"):
+        conda_command = "{} list --json".format(os.environ["MAMBA_EXE"])
     else:
         warnings.warn(
             "No conda/mamba/micromamba executable found. Unable to determine package versions.",
@@ -28,24 +27,12 @@ def _get_conda_list_package_versions() -> dict[str, str]:
         )
         return dict()
 
-    output = list(
-        filter(
-            lambda x: len(x) > 0,
-            subprocess.check_output(conda_command.split()).decode().split("\n"),
-        )
-    )
+    output = json.loads(subprocess.check_output(conda_command.split()).decode())
+
 
     package_versions = {}
-
-    # pixi has a brief header, others list "here's the path", etc
-    for output_line in output[3 - has_executable("pixi") * 2 : -1]:
-        # The output format of `conda`/`mamba list` and `micromamba list` are different.
-        # See https://github.com/openforcefield/openff-utilities/issues/65
-        # Some setups may also have even more custom headers, which could cause this to bubble up a ValueError.
-        # See https://github.com/openforcefield/openff-utilities/issues/41
-        package_name, package_version, *_ = output_line.split()
-
-        package_versions[package_name] = package_version
+    for _package in output:
+        package_versions[_package["name"]] = _package["version"]
 
     return package_versions
 
