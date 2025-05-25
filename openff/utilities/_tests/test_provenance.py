@@ -26,16 +26,8 @@ def test_conda_unavailable_returns_empty_dict(monkeypatch):
         monkeypatch.context() as m,
         pytest.warns(CondaExecutableNotFoundWarning, match="No .* executable found"),
     ):
-        import openff.utilities.utilities
-
-        m.setattr(
-            openff.utilities.utilities,
-            "has_executable",
-            mock_has_executable,
-        )
-
-        # dummy-check that the mocking works
-        assert not openff.utilities.utilities.has_executable("pwd")
+        m.setenv("PIXI_IN_SHELL","0")
+        m.setenv("CONDA_SHLVL","0")
 
         assert _get_conda_list_package_versions() == dict()
 

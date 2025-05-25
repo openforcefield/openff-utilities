@@ -14,7 +14,7 @@ def _get_conda_list_package_versions() -> dict[str, str]:
     """
     from openff.utilities.warnings import CondaExecutableNotFoundWarning
 
-    if os.environ.get("PIXI_IN_SHELL") == "1":
+    if os.environ.get("PIXI_IN_SHELL") == "1" and os.environ.get("PIXI_EXE"):
         conda_command = "{} list --json --manifest-path {}".format(
             os.environ["PIXI_EXE"], os.environ["PIXI_PROJECT_MANIFEST"]
         )
