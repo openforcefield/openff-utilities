@@ -26,8 +26,8 @@ def test_conda_unavailable_returns_empty_dict(monkeypatch):
         monkeypatch.context() as m,
         pytest.warns(CondaExecutableNotFoundWarning, match="No .* executable found"),
     ):
-        m.setenv("PIXI_IN_SHELL","0")
-        m.setenv("CONDA_SHLVL","0")
+        m.setenv("PIXI_IN_SHELL", "0")
+        m.setenv("CONDA_SHLVL", "0")
 
         assert _get_conda_list_package_versions() == dict()
 
