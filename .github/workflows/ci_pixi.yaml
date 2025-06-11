@@ -45,7 +45,7 @@ jobs:
     - name: Install AmberTools
       if: matrix.ambertools == true && matrix.mamba-executable == 'pixi'
       run: |
-        ${{ matrix.mamba-executable}} add ambertools
+        ${{ matrix.mamba-executable}} add ambertools "numpy <2.3"
         ${{ matrix.mamba-executable}} list | grep amber
 
     - name: Check AmberTools Missing
