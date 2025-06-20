@@ -61,7 +61,7 @@ jobs:
     - name: Install AmberTools
       if: matrix.ambertools == true
       run: |
-        ${{ matrix.mamba-executable}} install --yes -c conda-forge ambertools
+        ${{ matrix.mamba-executable}} install --yes -c conda-forge ambertools "numpy <2.3"
         python -c "from shutil import which; assert which('sqm') is not None"
 
     - name: Check AmberTools Missing
