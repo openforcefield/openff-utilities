@@ -21,6 +21,9 @@ jobs:
     name: ${{ matrix.os }}, 🐍=${{ matrix.python-version }}, 🟠=${{ matrix.ambertools }}, 👁️=${{ matrix.openeye }}, 🐉=${{ matrix.mamba-executable }}
     runs-on: ${{ matrix.os }}
     strategy:
+      # roll back fail-fast change before merging
+      fail-fast: false
+
       matrix:
         os: [ubuntu-latest, macos-latest]
         python-version: ["3.11", "3.12", "3.13"]
