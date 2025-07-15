@@ -18,9 +18,9 @@ def _get_conda_list_package_versions() -> dict[str, str]:
         conda_command = "{} list --json --manifest-path {}".format(
             os.environ["PIXI_EXE"], os.environ["PIXI_PROJECT_MANIFEST"]
         )
-    elif os.environ.get("CONDA_SHLVL") == "1" and os.environ.get("CONDA_EXE"):
+    elif os.environ.get("CONDA_SHLVL", "0") != "0" and os.environ.get("CONDA_EXE"):
         conda_command = "{} list --json".format(os.environ["CONDA_EXE"])
-    elif os.environ.get("CONDA_SHLVL") == "1" and os.environ.get("MAMBA_EXE"):
+    elif os.environ.get("CONDA_SHLVL", "0") != "0" and os.environ.get("MAMBA_EXE"):
         conda_command = "{} list --json".format(os.environ["MAMBA_EXE"])
     else:
         warnings.warn(
