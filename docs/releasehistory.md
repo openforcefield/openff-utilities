@@ -13,6 +13,10 @@ Please note that all releases prior to a version 1.0.0 are considered pre-releas
 
 ## Current development
 
+### Performance improvements
+
+* #122: Improving getting information about conda environment.
+
 ### Breaking changes
 
 * #113: Drop support for Python 3.10
