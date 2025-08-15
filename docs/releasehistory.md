@@ -11,7 +11,7 @@ Dates are given in YYYY-MM-DD format.
 
 Please note that all releases prior to a version 1.0.0 are considered pre-releases and many API changes will come before a stable release.
 
-## Current development
+## 0.1.16 - 2025-08-15
 
 ### Performance improvements
 
@@ -19,7 +19,21 @@ Please note that all releases prior to a version 1.0.0 are considered pre-releas
 
 ### Breaking changes
 
-* #113: Drop support for Python 3.10
+* #113: Drop support for Python 3.10.
+
+### Bug fixes
+
+* #104: Fix a problematic import.
+
+### Miscellaneous improvements
+
+* #108: Use `importlib.resources` from the standard library.
+
+## 0.1.15 - 2025-01-06
+
+### Miscellaneous improvements
+
+* #102: Convert some provenance errors to warnings.
 
 ## 0.1.14 - 2025-01-27
 
