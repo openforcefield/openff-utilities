@@ -1,12 +1,12 @@
 import errno
 import importlib
 import os
-from collections.abc import Generator
+from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from functools import wraps
 from importlib.resources import as_file, files
 from tempfile import TemporaryDirectory
-from typing import Any, Callable, Literal, Optional, TypeVar
+from typing import Any, Literal, TypeVar
 
 from openff.utilities.exceptions import MissingOptionalDependencyError
 
@@ -149,7 +149,7 @@ def has_executable(program_name: str) -> bool:
 
 
 @contextmanager
-def temporary_cd(directory_path: Optional[str] = None) -> Generator[None, None, None]:
+def temporary_cd(directory_path: str | None = None) -> Generator[None, None, None]:
     """Temporarily move the current working directory to the path
     specified. If no path is given, a temporary directory will be
     created, moved into, and then destroyed when the context manager

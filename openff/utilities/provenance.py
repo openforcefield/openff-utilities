@@ -3,7 +3,6 @@ import json
 import os
 import subprocess
 import warnings
-from typing import Optional
 
 
 @functools.lru_cache
@@ -38,7 +37,7 @@ def _get_conda_list_package_versions() -> dict[str, str]:
     return package_versions
 
 
-def get_ambertools_version() -> Optional[str]:
+def get_ambertools_version() -> str | None:
     """
     Attempts to retrieve the version of the currently installed AmberTools.
 
