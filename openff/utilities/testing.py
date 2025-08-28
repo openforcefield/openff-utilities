@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING
 
 from openff.utilities.utilities import has_executable, has_package
 
@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from _pytest.mark.structures import MarkDecorator
 
 
-def skip_if_missing(package_name: str, reason: Optional[str] = None) -> "MarkDecorator":
+def skip_if_missing(package_name: str, reason: str | None = None) -> "MarkDecorator":
     """
     Helper function to generate a pytest.mark.skipif decorator
     for any package. This allows tests to be skipped if some
@@ -32,7 +32,7 @@ def skip_if_missing(package_name: str, reason: Optional[str] = None) -> "MarkDec
     return requires_package
 
 
-def skip_if_missing_exec(exec: Union[str, list[str]]) -> "MarkDecorator":
+def skip_if_missing_exec(exec: str | list[str]) -> "MarkDecorator":
     """Helper function to generate a pytest.mark.skipif decorator
     if an executable(s) is not found."""
     import pytest
