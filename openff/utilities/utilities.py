@@ -134,7 +134,8 @@ def has_executable(program_name: str) -> bool:
     def _is_executable(fpath: str) -> bool:
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
 
-    fpath, fname = os.path.split(program_name)
+    fpath, _ = os.path.split(program_name)
+
     if fpath:
         if _is_executable(program_name):
             return True
