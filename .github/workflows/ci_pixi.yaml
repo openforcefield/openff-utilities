@@ -35,10 +35,9 @@ jobs:
 
     - name: Set up environment with pixi
       if: matrix.mamba-executable == 'pixi'
-      uses: prefix-dev/setup-pixi@v0.9.0
+      uses: prefix-dev/setup-pixi@v0.9.1
       with:
-        manifest-path: pyproject.toml
-        pixi-version: v0.34.0
+        pixi-version: v0.56.0
         activate-environment: true
         environments: ${{ matrix.environment }}
 
@@ -50,12 +49,12 @@ jobs:
 
     - name: Check AmberTools Missing
       if: matrix.ambertools == false && matrix.mamba-executable == 'pixi'
-      run: python -c "from shutil import which; assert which('sqm') is None"
+      run: pixi run python -c "from shutil import which; assert which('sqm') is None"
 
     - name: Check AmberTools installation
       # This needs to be in a different step, at least for how I currently understand pixi
       if: matrix.ambertools == true && matrix.mamba-executable == 'pixi'
-      run: python -c "from shutil import which; assert which('sqm') is not None"
+      run: pixi run python devtools/scripts/assert_ambertools_found.py
 
     - name: Install OpenEye Toolkits
       if: matrix.openeye == true && matrix.mamba-executable == 'pixi'
