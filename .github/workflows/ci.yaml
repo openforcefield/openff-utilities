@@ -1,0 +1,116 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+  schedule:
+    # At 07:00 UTC on Monday and Thursday.
+    - cron: "0 7 * * *"
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash -leo pipefail {0} {0}
+
+jobs:
+  test:
+    name: ${{ matrix.os }}, 🐍=${{ matrix.python-version }}, 🟠=${{ matrix.ambertools }}, 👁️=${{ matrix.openeye }}, 🐉=${{ matrix.mamba-executable }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.11", "3.12", "3.13"]
+        ambertools: [false, true]
+        openeye: [false, true]
+        mamba-executable: ["micromamba"]  # TODO: Add "mamba" back
+        exclude:
+          - python-version: "3.13"
+            ambertools: true
+          - python-version: "3.13"
+            openeye: true
+
+    env:
+      OE_LICENSE: ${{ github.workspace }}/oe_license.txt
+      COV: --cov=openff/utilities --cov-report=xml --cov-append
+
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+
+    - name: Set up conda environment with micromamba
+      if: matrix.mamba-executable == 'micromamba'
+      uses: mamba-org/setup-micromamba@v2
+      with:
+        environment-file: devtools/conda-envs/test_env.yaml
+        create-args: >-
+          python=${{ matrix.python-version }}
+
+    - name: Set up conda environment with Mamba
+      if: matrix.mamba-executable == 'mamba'
+      uses: conda-incubator/setup-miniconda@v3
+      with:
+        environment-file: devtools/conda-envs/test_env.yaml
+        python-version: ${{ matrix.python-version }}
+        mamba-version: "*"
+  
+    - name: Install AmberTools
+      if: matrix.ambertools == true
+      run: |
+        ${{ matrix.mamba-executable}} install --yes -c conda-forge ambertools "numpy <2.3"
+        python -c "from shutil import which; assert which('sqm') is not None"
+
+    - name: Check AmberTools Missing
+      if: matrix.ambertools == false
+      run: |
+        python -c "from shutil import which; assert which('sqm') is None"
+
+    - name: Install OpenEye Toolkits
+      if: matrix.openeye == true
+      run: |
+        ${{ matrix.mamba-executable}} install --yes -c openeye openeye-toolkits
+        python -c "from openeye import oechem"
+
+    - name: Check OpenEye Toolkits missing
+      if: matrix.openeye == false
+      run: python devtools/scripts/assert_openeye_not_found.py
+
+    - name: Install package
+      run: python -m pip install -e .
+
+    - name: Environment Information
+      run: ${{ matrix.mamba-executable}} list
+
+    - name: Run mypy
+      if: ${{ matrix.python-version == 3.12 }}
+      run: mypy -p "openff.utilities"
+
+    - name: Run a test with OpenEye toolkits installed but NOT licensed
+      if: matrix.openeye == true
+      run:
+        pytest $COV openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license
+
+    - name: License OpenEye
+      if: matrix.openeye == true
+      run: |
+        echo "${SECRET_OE_LICENSE}" > ${OE_LICENSE}
+        python -c "from openeye import oechem; assert oechem.OEChemIsLicensed()"
+      env:
+        SECRET_OE_LICENSE: ${{ secrets.OE_LICENSE }}
+
+    - name: Run unit tests
+      run: |
+        pytest $COV openff/utilities/_tests/ -m leaky
+        pytest $COV openff/utilities/_tests/ -m "not leaky"
+
+    - name: Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
+        fail_ci_if_error: true
+        disable_search: true
