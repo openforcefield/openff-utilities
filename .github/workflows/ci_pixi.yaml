@@ -66,11 +66,7 @@ jobs:
     - name: Install OpenEye Toolkits
       if: matrix.openeye == true && matrix.mamba-executable == 'pixi'
       run: |
-<<<<<<< HEAD
-        ${{ matrix.mamba-executable}} run --environment ${{ matrix.environment }} ${{ matrix.mamba-executable }} add openeye-toolkits
-=======
         ${{ matrix.mamba-executable}} add openeye-toolkits
->>>>>>> parent of 832e664 (Try updating only tested environment)
         pixi run python -c "from openeye import oechem"
 
     - name: Check OpenEye Toolkits missing
