@@ -26,7 +26,7 @@ jobs:
         exclude:
           - environment: "py314"
             ambertools: true
-          - environment: "py314"
+          - environment: "py313"
             openeye: true
           - environment: "py314"
             openeye: true
@@ -51,7 +51,7 @@ jobs:
     - name: Install AmberTools
       if: matrix.ambertools == true && matrix.mamba-executable == 'pixi'
       run: |
-        ${{ matrix.mamba-executable}} add ambertools "numpy <2.3"
+        ${{ matrix.mamba-executable}} add --environment ${{ matrix.environment }} ambertools "numpy <2.3"
         ${{ matrix.mamba-executable}} list | grep amber
 
     - name: Check AmberTools Missing
@@ -66,7 +66,7 @@ jobs:
     - name: Install OpenEye Toolkits
       if: matrix.openeye == true && matrix.mamba-executable == 'pixi'
       run: |
-        ${{ matrix.mamba-executable}} add openeye-toolkits
+        ${{ matrix.mamba-executable}} add --environment ${{ matrix.environment }} openeye-toolkits
         pixi run python -c "from openeye import oechem"
 
     - name: Check OpenEye Toolkits missing
