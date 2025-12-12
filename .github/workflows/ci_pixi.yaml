@@ -23,6 +23,13 @@ jobs:
         ambertools: [false, true]
         openeye: [false, true]
         mamba-executable: ["pixi"]
+        exclude:
+          - environment: "py314"
+            ambertools: true
+          - environment: "py314"
+            openeye: true
+          - environment: "py314"
+            openeye: true
 
     env:
       OE_LICENSE: ${{ github.workspace }}/oe_license.txt
