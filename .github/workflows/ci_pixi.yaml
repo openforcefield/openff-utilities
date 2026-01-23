@@ -37,6 +37,7 @@ jobs:
           py311-openeye-ambertools,
           py312-openeye-ambertools,
           py313-openeye-ambertools,
+          typing,
         ]
         mamba-executable: ["pixi"]
 
@@ -80,8 +81,11 @@ jobs:
       env:
         SECRET_OE_LICENSE: ${{ secrets.OE_LICENSE }}
 
+    - name: Run mypy
+      if: ${{ matrix.environment == 'typing' }}
+      run: pixi run -e ${{ matrix.environment }} run_mypy
+
     - name: Run unit tests
-      if: matrix.mamba-executable == 'pixi'
       run: |
         pixi run -e ${{ matrix.environment }} run_tests
 
