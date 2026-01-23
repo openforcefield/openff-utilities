@@ -86,6 +86,7 @@ jobs:
       run: pixi run -e ${{ matrix.environment }} run_mypy
 
     - name: Run unit tests
+      if: ${{ matrix.environment != 'typing' }}
       run: |
         pixi run -e ${{ matrix.environment }} run_tests
 
