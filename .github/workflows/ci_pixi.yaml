@@ -56,39 +56,40 @@ jobs:
       with:
         pixi-version: v0.56.0
         environments: ${{ matrix.environment }}
+        activate-environment: ${{ matrix.environment }}
 
     - name: Check AmberTools Missing
       if: ${{ !contains(matrix.environment, 'ambertools') }}
-      run: pixi run -e ${{ matrix.environment }} python -c "from shutil import which; assert which('sqm') is None"
+      run: python -c "from shutil import which; assert which('sqm') is None"
 
     - name: Check AmberTools installation
       if: ${{ contains(matrix.environment, 'ambertools') }}
-      run: pixi run -e ${{ matrix.environment }} python devtools/scripts/assert_ambertools_found.py
+      run: python devtools/scripts/assert_ambertools_found.py
 
     - name: Check OpenEye Toolkits missing
       if: ${{ !contains(matrix.environment, 'openeye') }}
-      run: pixi run -e ${{ matrix.environment }} python devtools/scripts/assert_openeye_not_found.py
+      run: python devtools/scripts/assert_openeye_not_found.py
 
     - name: Run a test with OpenEye toolkits installed but NOT licensed
       if: ${{ contains(matrix.environment, 'openeye') }}
-      run: pixi run -e ${{ matrix.environment }} run_edge_case
+      run: run_edge_case
 
     - name: License OpenEye
       if: ${{ contains(matrix.environment, 'openeye') }}
       run: |
         echo "${SECRET_OE_LICENSE}" > ${OE_LICENSE}
-        pixi run -e ${{ matrix.environment }} python -c "from openeye import oechem; assert oechem.OEChemIsLicensed()"
+        python -c "from openeye import oechem; assert oechem.OEChemIsLicensed()"
       env:
         SECRET_OE_LICENSE: ${{ secrets.OE_LICENSE }}
 
     - name: Run mypy
       if: ${{ matrix.environment == 'typing' }}
-      run: pixi run -e ${{ matrix.environment }} run_mypy
+      run: run_mypy
 
     - name: Run unit tests
       if: ${{ matrix.environment != 'typing' }}
       run: |
-        pixi run -e ${{ matrix.environment }} run_tests
+        run_tests
 
     - name: Codecov
       uses: codecov/codecov-action@v5
