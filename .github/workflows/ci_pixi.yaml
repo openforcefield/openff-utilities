@@ -70,7 +70,7 @@ jobs:
 
     - name: Run a test with OpenEye toolkits installed but NOT licensed
       if: ${{ contains(matrix.environment, 'openeye') }}
-      run: pixi run -e ${{ matrix.environment }} run_tests
+      run: pixi run -e ${{ matrix.environment }} python -m pytest openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license
 
     - name: License OpenEye
       if: ${{ contains(matrix.environment, 'openeye') }}
