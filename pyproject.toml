@@ -61,9 +61,13 @@ strict = true
 
 [tool.versioningit]
 
-[tool.pixi.project]
-channels = [ "conda-forge", "openeye" ]
-platforms = [ "linux-64", "osx-64", "osx-arm64" ]
+[tool.pixi.workspace]
+channels = [ "conda-forge" ]
+platforms = [ "linux-64", "osx-arm64" ]
+
+[tool.pixi.tasks]
+postinstall = "pip install -e ."
+run_tests = { cmd = "pixi run pytest $COV openff/utilities/_tests/ -m leaky && pixi run pytest $COV openff/utilities/_tests/ -m 'not leaky'", depends-on = "postinstall" }
 
 [tool.pixi.dependencies]
 python = "*"
@@ -81,11 +85,37 @@ types-toml = "*"
 [tool.pixi.pypi-dependencies]
 openff-utilities = { path = ".", editable = true }
 
+[tool.pixi.feature.openeye]
+channels = [ "openeye" ]
+dependencies = { openeye-toolkits = "*" }
+
+[tool.pixi.feature.ambertools.dependencies]
+ambertools = "*"
+
+[tool.pixi.feature.dev.dependencies]
+pre-commit = "*"
+
 [tool.pixi.feature.py311.dependencies]
 python = "3.11.*"
 [tool.pixi.feature.py312.dependencies]
 python = "3.12.*"
+[tool.pixi.feature.py313.dependencies]
+python = "3.13.*"
+[tool.pixi.feature.py314.dependencies]
+python = "3.14.*"
 
 [tool.pixi.environments]
 py311 = [ "py311" ]
 py312 = [ "py312" ]
+py313 = [ "py313" ]
+py314 = [ "py314" ]
+py311-openeye = [ "py311", "openeye" ]
+py312-openeye = [ "py312", "openeye" ]
+py313-openeye = [ "py313", "openeye" ]
+py311-ambertools = [ "py311", "ambertools" ]
+py312-ambertools = [ "py312", "ambertools" ]
+py313-ambertools = [ "py313", "ambertools" ]
+py311-openeye-ambertools = [ "py311", "ambertools", "openeye" ]
+py312-openeye-ambertools = [ "py312", "ambertools", "openeye" ]
+py313-openeye-ambertools = [ "py313", "ambertools", "openeye" ]
+dev = [ "py313", "dev" ]
