@@ -67,7 +67,8 @@ platforms = [ "linux-64", "osx-arm64" ]
 
 [tool.pixi.tasks]
 postinstall = "pip install -e ."
-run_tests = { cmd = "pixi run pytest $COV openff/utilities/_tests/ -m leaky && pixi run pytest $COV openff/utilities/_tests/ -m 'not leaky'", depends-on = "postinstall" }
+run_tests = { cmd = "pytest $COV openff/utilities/_tests/ -m leaky && pixi run pytest $COV openff/utilities/_tests/ -m 'not leaky'", depends-on = "postinstall" }
+run_edge_case = { cmd = "pytest $COV openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license", depends-on = "postinstall" }
 run_mypy = { cmd = "python -m mypy -p 'openff.utilities'", depends-on = "postinstall" }
 
 [tool.pixi.dependencies]
