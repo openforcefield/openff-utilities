@@ -71,7 +71,7 @@ jobs:
 
     - name: Run a test with OpenEye toolkits installed but NOT licensed
       if: ${{ contains(matrix.environment, 'openeye') }}
-      run: run_edge_case
+      run: pixi run run_edge_case
 
     - name: License OpenEye
       if: ${{ contains(matrix.environment, 'openeye') }}
@@ -83,11 +83,11 @@ jobs:
 
     - name: Run mypy
       if: ${{ matrix.environment == 'typing' }}
-      run: run_mypy
+      run: pixi run run_mypy
 
     - name: Run unit tests
       if: ${{ matrix.environment != 'typing' }}
-      run: run_tests
+      run: pixi run run_tests
 
     - name: Codecov
       uses: codecov/codecov-action@v5
