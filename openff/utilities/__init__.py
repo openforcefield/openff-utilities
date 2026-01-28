@@ -28,3 +28,5 @@ __all__ = (
 )
 
 __version__ = version("openff.utilities")
+
+raise Exception("FLAG")
