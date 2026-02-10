@@ -117,5 +117,6 @@ ENV/
 ehthumbs.db
 Thumbs.db
 
-.pixi/
-pixi.lock
+# pixi environments
+.pixi/*
+!.pixi/config.toml
