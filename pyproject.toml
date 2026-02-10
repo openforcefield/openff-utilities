@@ -2,7 +2,7 @@
 build-backend = "setuptools.build_meta"
 requires = [
   "setuptools>=77.0.3",
-  "versioningit",
+  "setuptools-scm>=8",
 ]
 
 [project]
@@ -24,6 +24,9 @@ dynamic = [ "version" ]
 
 [tool.setuptools.packages]
 find = {}
+
+[tool.setuptools_scm]
+fallback_version = "0.0.0"
 
 [tool.ruff]
 line-length = 119
@@ -59,8 +62,6 @@ warn_unused_ignores = true
 show_error_codes = true
 strict = true
 
-[tool.versioningit]
-
 [tool.pixi.workspace]
 channels = [ "conda-forge" ]
 platforms = [ "linux-64", "osx-arm64" ]
@@ -73,7 +74,6 @@ run_mypy = { cmd = "python -m mypy -p 'openff.utilities'" }
 [tool.pixi.dependencies]
 python = "*"
 pip = "*"
-versioningit = "*"
 
 [tool.pixi.pypi-dependencies]
 openff-utilities = { path = ".", editable = true }
