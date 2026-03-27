@@ -108,7 +108,7 @@ jobs:
         pytest $COV openff/utilities/_tests/ -m "not leaky"
 
     - name: Codecov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: ./coverage.xml
