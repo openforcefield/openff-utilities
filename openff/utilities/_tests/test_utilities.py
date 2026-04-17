@@ -1,4 +1,5 @@
 import os
+import threading
 
 import pytest
 
@@ -90,9 +91,12 @@ def test_temporary_cd():
 
     assert compare_paths(os.getcwd(), original_directory)
 
-    # Move to a temporary directory
-    with temporary_cd():
-        assert not compare_paths(os.getcwd(), original_directory)
+    # Move to a temporary directory: CWD is NOT changed in the no-argument form.
+    # The caller must use the yielded path for file operations.
+    with temporary_cd() as tmpdir:
+        assert compare_paths(os.getcwd(), original_directory)
+        assert os.path.isdir(tmpdir)
+        assert not compare_paths(tmpdir, original_directory)
 
     assert compare_paths(os.getcwd(), original_directory)
 
@@ -106,6 +110,53 @@ def test_temporary_cd():
         assert compare_paths(os.getcwd(), original_directory)
 
     assert compare_paths(os.getcwd(), original_directory)
+
+
+def test_temporary_cd_yields_path():
+    """Tests that temporary_cd yields the absolute path of the directory."""
+
+    original_directory = os.getcwd()
+
+    # Auto temp dir: yielded path should be an absolute path different from original
+    with temporary_cd() as tmpdir:
+        assert os.path.isabs(tmpdir)
+        assert not compare_paths(tmpdir, original_directory)
+        # CWD is NOT changed in the no-argument form (thread-safe behaviour)
+        assert compare_paths(os.getcwd(), original_directory)
+
+    # Specific directory: yielded path should match the absolute path of the given dir
+    with temporary_cd(os.pardir) as tmpdir:
+        expected = os.path.abspath(os.path.join(original_directory, os.pardir))
+        assert compare_paths(tmpdir, expected)
+        assert compare_paths(os.getcwd(), expected)
+
+    # Empty string: yielded path should be the original directory
+    with temporary_cd("") as tmpdir:
+        assert compare_paths(tmpdir, original_directory)
+
+
+def test_temporary_cd_thread_safety():
+    """Tests that temporary_cd is thread-safe when using the yielded absolute path."""
+
+    errors: list[str] = []
+
+    def func(n: int) -> None:
+        with temporary_cd() as tmpdir:
+            file_path = os.path.join(tmpdir, "f.txt")
+            with open(file_path, "w") as f:
+                f.write(str(n))
+            with open(file_path) as f:
+                read_value = int(f.read())
+            if read_value != n:
+                errors.append(f"Expected {n} but found {read_value}")
+
+    threads = [threading.Thread(target=func, args=(i,)) for i in range(8)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+    assert not errors, f"Thread safety errors: {errors}"
 
 
 def test_has_package():
