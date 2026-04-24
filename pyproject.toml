@@ -12,10 +12,9 @@ readme = "README.md"
 license = "MIT"
 license-files = [ "LICENSE" ]
 authors = [ { name = "Open Force Field Initiative", email = "info@openforcefield.org" } ]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
@@ -101,8 +100,6 @@ numpy = "2.2.*"  # ParmEd bugs
 [tool.pixi.feature.dev.dependencies]
 pre-commit = "*"
 
-[tool.pixi.feature.py311.dependencies]
-python = "3.11.*"
 [tool.pixi.feature.py312.dependencies]
 python = "3.12.*"
 [tool.pixi.feature.py313.dependencies]
@@ -111,17 +108,13 @@ python = "3.13.*"
 python = "3.14.*"
 
 [tool.pixi.environments]
-py311 = [ "py311", "test" ]
 py312 = [ "py312", "test" ]
 py313 = [ "py313", "test" ]
 py314 = [ "py314", "test" ]
-py311-openeye = [ "py311", "test", "openeye" ]
 py312-openeye = [ "py312", "test", "openeye" ]
 py313-openeye = [ "py313", "test", "openeye" ]
-py311-ambertools = [ "py311", "test", "ambertools" ]
 py312-ambertools = [ "py312", "test", "ambertools" ]
 py313-ambertools = [ "py313", "test", "ambertools" ]
-py311-openeye-ambertools = [ "py311", "test", "ambertools", "openeye" ]
 py312-openeye-ambertools = [ "py312", "test", "ambertools", "openeye" ]
 py313-openeye-ambertools = [ "py313", "test", "ambertools", "openeye" ]
 dev = [ "py313", "dev" ]
