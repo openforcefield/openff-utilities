@@ -28,6 +28,7 @@ find = {}
 fallback_version = "0.0.0"
 
 [tool.ruff]
+target-version = "py312"
 line-length = 119
 namespace-packages = [ "openff/utilities/" ]
 
@@ -97,8 +98,9 @@ dependencies = { openeye-toolkits = "*" }
 ambertools = "*"
 numpy = "2.2.*"  # ParmEd bugs
 
-[tool.pixi.feature.dev.dependencies]
+[tool.pixi.feature.dev.pypi-dependencies]
 pre-commit = "*"
+ipdb = "*"
 
 [tool.pixi.feature.py312.dependencies]
 python = "3.12.*"
