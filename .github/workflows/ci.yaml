@@ -52,7 +52,7 @@ jobs:
 
     - name: Set up conda environment with Mamba
       if: matrix.mamba-executable == 'mamba'
-      uses: conda-incubator/setup-miniconda@v3
+      uses: conda-incubator/setup-miniconda@v4
       with:
         environment-file: devtools/conda-envs/test_env.yaml
         python-version: ${{ matrix.python-version }}
