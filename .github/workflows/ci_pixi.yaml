@@ -23,17 +23,13 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         environment: [
-          py311,
           py312,
           py313,
           py314,
-          py311-openeye,
           py312-openeye,
           py313-openeye,
-          py311-ambertools,
           py312-ambertools,
           py313-ambertools,
-          py311-openeye-ambertools,
           py312-openeye-ambertools,
           py313-openeye-ambertools,
           typing,
