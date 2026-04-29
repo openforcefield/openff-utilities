@@ -150,39 +150,49 @@ def has_executable(program_name: str) -> bool:
 
 
 @contextmanager
-def temporary_cd(directory_path: str | None = None) -> Generator[None, None, None]:
+def temporary_cd(directory_path: str | None = None) -> Generator[str, None, None]:
     """Temporarily move the current working directory to the path
     specified. If no path is given, a temporary directory will be
-    created, moved into, and then destroyed when the context manager
-    is closed.
+    created and its path yielded; the directory is destroyed when the
+    context manager is closed.
+
+    When ``directory_path`` is ``None`` (the default), ``os.chdir`` is
+    **not** called, making this form safe to use from multiple threads
+    concurrently.  Use the yielded absolute path for all file
+    operations inside the block (e.g.
+    ``open(os.path.join(tmpdir, "file"))``).
+
+    When an explicit ``directory_path`` is given, ``os.chdir`` is still
+    called for backward compatibility.  Note that ``os.chdir`` is a
+    process-wide operation and is therefore **not** thread-safe.
 
     Parameters
     ----------
     directory_path: str, optional
 
-    Returns
-    -------
+    Yields
+    ------
+    str
+        The absolute path of the directory.
 
     """
 
     if directory_path is not None and len(directory_path) == 0:
-        yield
+        yield os.getcwd()
         return
 
-    old_directory = os.getcwd()
+    if directory_path is None:
+        with TemporaryDirectory() as new_directory:
+            yield new_directory
 
-    try:
-        if directory_path is None:
-            with TemporaryDirectory() as new_directory:
-                os.chdir(new_directory)
-                yield
-
-        else:
-            os.chdir(directory_path)
-            yield
-
-    finally:
-        os.chdir(old_directory)
+    else:
+        abs_directory = os.path.abspath(directory_path)
+        old_directory = os.getcwd()
+        try:
+            os.chdir(abs_directory)
+            yield abs_directory
+        finally:
+            os.chdir(old_directory)
 
 
 def get_data_dir_path(relative_path: str, package_name: str) -> str:
