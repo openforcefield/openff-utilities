@@ -41,7 +41,7 @@ jobs:
       COV: --cov=openff/utilities --cov-report=xml --cov-append
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Set up environment with pixi
       if: matrix.mamba-executable == 'pixi'
