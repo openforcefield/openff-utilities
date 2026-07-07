@@ -36,7 +36,6 @@ pypi-dependencies.openff-utilities = { path = ".", editable = true }
 tasks.run_edge_case = { cmd = "pytest $COV openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license" }
 tasks.run_mypy = { cmd = "python -m mypy -p 'openff.utilities'" }
 tasks.run_tests = { cmd = "pytest $COV openff/utilities/_tests/ -m leaky && pixi run pytest $COV openff/utilities/_tests/ -m 'not leaky'" }
-
 feature.ambertools.dependencies.ambertools = "*"
 feature.ambertools.dependencies.numpy = "2.2.*"  # ParmEd bugs
 feature.dev.pypi-dependencies.ipdb = "*"
