@@ -21,103 +21,78 @@ classifiers = [
 ]
 dynamic = [ "version" ]
 
-[tool.setuptools.packages]
-find = {}
+[tool.setuptools]
+packages.find = {}
 
 [tool.setuptools_scm]
 fallback_version = "0.0.0"
+
+[tool.pixi]
+workspace.channels = [ "conda-forge" ]
+workspace.platforms = [ "linux-64", "osx-arm64" ]
+dependencies.pip = "*"
+dependencies.python = "*"
+pypi-dependencies.openff-utilities = { path = ".", editable = true }
+tasks.run_edge_case = { cmd = "pytest $COV openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license" }
+tasks.run_mypy = { cmd = "python -m mypy -p 'openff.utilities'" }
+tasks.run_tests = { cmd = "pytest $COV openff/utilities/_tests/ -m leaky && pixi run pytest $COV openff/utilities/_tests/ -m 'not leaky'" }
+feature.ambertools.dependencies.ambertools = "*"
+feature.ambertools.dependencies.numpy = "2.2.*"  # ParmEd bugs
+feature.dev.pypi-dependencies.ipdb = "*"
+feature.dev.pypi-dependencies.pre-commit = "*"
+feature.openeye.channels = [ "openeye" ]
+feature.openeye.dependencies = { openeye-toolkits = "*" }
+feature.py312.dependencies.python = "3.12.*"
+feature.py313.dependencies.python = "3.13.*"
+feature.py314.dependencies.python = "3.14.*"
+feature.test.dependencies.pytest = "*"
+feature.test.dependencies.pytest-cov = "*"
+feature.test.dependencies.pytest-randomly = "*"
+feature.test.dependencies.pytest-xdist = "*"
+feature.typing.dependencies.mypy = "*"
+feature.typing.dependencies.pytest = "*"
+feature.typing.dependencies.types-setuptools = "*"
+feature.typing.dependencies.types-toml = "*"
+environments.dev = [ "py313", "dev" ]
+environments.py312 = [ "py312", "test" ]
+environments.py312-ambertools = [ "py312", "test", "ambertools" ]
+environments.py312-openeye = [ "py312", "test", "openeye" ]
+environments.py312-openeye-ambertools = [ "py312", "test", "ambertools", "openeye" ]
+environments.py313 = [ "py313", "test" ]
+environments.py313-ambertools = [ "py313", "test", "ambertools" ]
+environments.py313-openeye = [ "py313", "test", "openeye" ]
+environments.py313-openeye-ambertools = [ "py313", "test", "ambertools", "openeye" ]
+environments.py314 = [ "py314", "test" ]
+environments.typing = [ "py313", "typing" ]
 
 [tool.ruff]
 target-version = "py312"
 line-length = 119
 namespace-packages = [ "openff/utilities/" ]
-
 lint.select = [ "E", "F", "I", "NPY", "RUF", "UP", "W" ]
 lint.per-file-ignores."openff/utilities/__init__.py" = [ "F401" ]
-
-[tool.pytest.ini_options]
-markers = [
-  "leaky: run leaky tests",
-]
-addopts = "--cov=openff/utilities --cov-report=xml -m \"not leaky\""
-
-[tool.coverage.run]
-omit = [
-  "*/*/_tests/*",
-]
-
-[tool.coverage.report]
-exclude_lines = [
-  "pragma: no cover",
-  "if TYPE_CHECKING:",
-  "raise NotImplementedError",
-  "@overload",
-]
 
 [tool.mypy]
 exclude = "openff/utilities/_tests"
 python_version = "3.12"
-warn_unused_configs = true
 warn_unused_ignores = true
-show_error_codes = true
 strict = true
+warn_unused_configs = true
+show_error_codes = true
 
-[tool.pixi.workspace]
-channels = [ "conda-forge" ]
-platforms = [ "linux-64", "osx-arm64" ]
+[tool.pytest]
+ini_options.addopts = '--cov=openff/utilities --cov-report=xml -m "not leaky"'
+ini_options.markers = [
+  "leaky: run leaky tests",
+]
 
-[tool.pixi.tasks]
-run_tests = { cmd = "pytest $COV openff/utilities/_tests/ -m leaky && pixi run pytest $COV openff/utilities/_tests/ -m 'not leaky'" }
-run_edge_case = { cmd = "pytest $COV openff/utilities/_tests/test_utilities.py::test_requires_oe_module_installed_missing_license" }
-run_mypy = { cmd = "python -m mypy -p 'openff.utilities'" }
-
-[tool.pixi.dependencies]
-python = "*"
-pip = "*"
-
-[tool.pixi.pypi-dependencies]
-openff-utilities = { path = ".", editable = true }
-
-[tool.pixi.feature.test.dependencies]
-pytest = "*"
-pytest-cov = "*"
-pytest-xdist = "*"
-pytest-randomly = "*"
-
-[tool.pixi.feature.typing.dependencies]
-mypy = "*"
-pytest = "*"
-types-setuptools = "*"
-types-toml = "*"
-
-[tool.pixi.feature.openeye]
-channels = [ "openeye" ]
-dependencies = { openeye-toolkits = "*" }
-
-[tool.pixi.feature.ambertools.dependencies]
-ambertools = "*"
-numpy = "2.2.*"  # ParmEd bugs
-
-[tool.pixi.feature.dev.pypi-dependencies]
-pre-commit = "*"
-ipdb = "*"
-
-[tool.pixi.feature.py312.dependencies]
-python = "3.12.*"
-[tool.pixi.feature.py313.dependencies]
-python = "3.13.*"
-[tool.pixi.feature.py314.dependencies]
-python = "3.14.*"
-
-[tool.pixi.environments]
-py312 = [ "py312", "test" ]
-py313 = [ "py313", "test" ]
-py314 = [ "py314", "test" ]
-py312-openeye = [ "py312", "test", "openeye" ]
-py313-openeye = [ "py313", "test", "openeye" ]
-py312-ambertools = [ "py312", "test", "ambertools" ]
-py313-ambertools = [ "py313", "test", "ambertools" ]
-py312-openeye-ambertools = [ "py312", "test", "ambertools", "openeye" ]
-py313-openeye-ambertools = [ "py313", "test", "ambertools", "openeye" ]
-dev = [ "py313", "dev" ]
-typing = [ "py313", "typing" ]
+[tool.coverage]
+run.omit = [
+  "*/*/_tests/*",
+]
+report.exclude_lines = [
+  "@overload",
+  "if TYPE_CHECKING:",
+  "pragma: no cover",
+  "raise NotImplementedError",
+]
