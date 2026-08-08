@@ -11,11 +11,15 @@ Dates are given in YYYY-MM-DD format.
 
 Please note that all releases prior to a version 1.0.0 are considered pre-releases and many API changes will come before a stable release.
 
-## Current development
+## 0.1.17 - 2025-08-07
 
 ### Maintenance changes
 
 * #141: Switch to `setuptools_scm` for version handling
+
+### Bug fixes
+
+* #157: Fix compatibility with new JSON output introduced in mamba 2.9.0
 
 ## 0.1.16 - 2025-08-15
 
