@@ -18,7 +18,7 @@ defaults:
 
 jobs:
   test:
-    name: ${{ matrix.os }}, 🐍=${{ matrix.python-version }}, 🟠=${{ matrix.ambertools }}, 👁️=${{ matrix.openeye }}, 🐉=${{ matrix.mamba-executable }}
+    name: ${{ matrix.os }}, 🐍=${{ matrix.python-version }}, 🟠=${{ matrix.ambertools }}, 👁️=${{ matrix.openeye }}, 🐉=${{ matrix.mamba-executable }}@${{ matrix.micromamba-version }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -27,6 +27,11 @@ jobs:
         ambertools: [false, true]
         openeye: [false, true]
         mamba-executable: ["micromamba"]  # TODO: Add "mamba" back
+        # TEMPORARY, for #156: pin both the pre- and post-4202 micromamba
+        # releases to confirm the packages-key fix covers both `list --json`
+        # formats. Revert this axis (and the micromamba-version input below)
+        # before merging.
+        micromamba-version: ["2.8.1-0", "2.9.0-0"]
         exclude:
           - python-version: "3.14"
             ambertools: true
@@ -47,6 +52,7 @@ jobs:
       uses: mamba-org/setup-micromamba@v3
       with:
         environment-file: devtools/conda-envs/test_env.yaml
+        micromamba-version: ${{ matrix.micromamba-version }}
         create-args: >-
           python=${{ matrix.python-version }}
 
