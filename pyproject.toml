@@ -12,9 +12,10 @@ readme = "README.md"
 license = "MIT"
 license-files = [ "LICENSE" ]
 authors = [ { name = "Open Force Field Initiative", email = "info@openforcefield.org" } ]
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
@@ -38,10 +39,10 @@ tasks.run_mypy = { cmd = "python -m mypy -p 'openff.utilities'" }
 tasks.run_tests = { cmd = "pytest $COV openff/utilities/_tests/ -m leaky && pixi run pytest $COV openff/utilities/_tests/ -m 'not leaky'" }
 feature.ambertools.dependencies.ambertools = "*"
 feature.ambertools.dependencies.numpy = "2.2.*"  # ParmEd bugs
-feature.dev.pypi-dependencies.ipdb = "*"
-feature.dev.pypi-dependencies.pre-commit = "*"
+feature.dev.dependencies.pre-commit = "*"
 feature.openeye.channels = [ "openeye" ]
 feature.openeye.dependencies = { openeye-toolkits = "*" }
+feature.py311.dependencies.python = "3.11.*"
 feature.py312.dependencies.python = "3.12.*"
 feature.py313.dependencies.python = "3.13.*"
 feature.py314.dependencies.python = "3.14.*"
@@ -54,6 +55,10 @@ feature.typing.dependencies.pytest = "*"
 feature.typing.dependencies.types-setuptools = "*"
 feature.typing.dependencies.types-toml = "*"
 environments.dev = [ "py313", "dev" ]
+environments.py311 = [ "py311", "test" ]
+environments.py311-ambertools = [ "py311", "test", "ambertools" ]
+environments.py311-openeye = [ "py311", "test", "openeye" ]
+environments.py311-openeye-ambertools = [ "py311", "test", "ambertools", "openeye" ]
 environments.py312 = [ "py312", "test" ]
 environments.py312-ambertools = [ "py312", "test", "ambertools" ]
 environments.py312-openeye = [ "py312", "test", "openeye" ]
@@ -66,7 +71,7 @@ environments.py314 = [ "py314", "test" ]
 environments.typing = [ "py313", "typing" ]
 
 [tool.ruff]
-target-version = "py312"
+target-version = "py311"
 line-length = 119
 namespace-packages = [ "openff/utilities/" ]
 lint.select = [ "E", "F", "I", "NPY", "RUF", "UP", "W" ]
