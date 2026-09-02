@@ -11,6 +11,10 @@ Dates are given in YYYY-MM-DD format.
 
 Please note that all releases prior to a version 1.0.0 are considered pre-releases and many API changes will come before a stable release.
 
+## 0.1.18 - 2025-09-02
+
+* #150: Temporary re-introduce Python 3.11 in order to backport #157
+
 ## 0.1.17 - 2025-08-07
 
 ### Maintenance changes
