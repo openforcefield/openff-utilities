@@ -6,4 +6,4 @@
 - [ ] Add tests
 - [ ] Lint
 - [ ] Update docstrings
-- [ ] [AI disclosure](../AI_POLICY.md)
+- [ ] [AI disclosure](https://github.com/openforcefield/openff-utilities/blob/main/AI_POLICY.md)
