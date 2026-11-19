@@ -161,7 +161,7 @@ jobs:
         shell: bash
 
       - name: Run tests
-        working-directory: /tmp
+        # working-directory: /tmp
         run: python -m pytest -n auto -v --color=yes --durations=10
 
   publish:
