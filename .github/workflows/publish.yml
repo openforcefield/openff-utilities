@@ -133,7 +133,7 @@ jobs:
 
       - name: Verify installed wheel version
         env:
-          PACKAGE: openff-utilities
+          PACKAGE: openff.utilities
           DISTRIBUTION: openff-utilities
         run: |
           python -I - <<'PY'
