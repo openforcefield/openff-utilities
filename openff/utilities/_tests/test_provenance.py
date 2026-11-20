@@ -1,4 +1,5 @@
 import importlib
+import warnings
 
 import pytest
 
@@ -47,8 +48,11 @@ def test_conda_available_get_ambertools_version_not_found():
     try:
         importlib.import_module("parmed")
     except ImportError:
-        assert len(_get_conda_list_package_versions()) > 0
-        assert get_ambertools_version() is None
-        return
+        warnings.simplefilter("error", category=CondaExecutableNotFoundWarning)
+        try:
+            assert len(_get_conda_list_package_versions()) > 0
+            assert get_ambertools_version() is None
+        except CondaExecutableNotFoundWarning:
+            pytest.xfail("No conda(-like) executable found, xfail")
 
     pytest.skip("only run when ambertools is not installed.")

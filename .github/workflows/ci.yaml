@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - "main"
+      - "release/**"
   schedule:
     # At 07:00 UTC on Monday and Thursday.
     - cron: "0 7 * * *"
