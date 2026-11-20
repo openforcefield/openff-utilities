@@ -4,7 +4,9 @@ on:
   pull_request:
   release:
     # Stable GitHub Releases only.
-    types: [released]  # need another thing to make pre-releases work
+    types:
+      - released
+      - prereleased
 
   workflow_dispatch:
     inputs:
@@ -129,7 +131,7 @@ jobs:
             echo "Expected exactly one wheel, found ${#wheels[@]}"
             exit 1
           fi
-          python -m pip install "${wheels[0]}[viz]" pytest-xdist --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple
+          python -m pip install "${wheels[0]}" pytest-xdist --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple
           python -m pip install -r devtools/test-requirements.txt --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple
 
       - name: Verify installed wheel version
@@ -152,13 +154,6 @@ jobs:
 
           assert module.__version__ == installed_version
           PY
-
-      # Most thorough would be to hash every file that gets changed,
-      # but we just bump the cache every week to keep it simple.
-      - name: Get Week Number
-        id: get-week
-        run: echo "week=$(/bin/date -u "+%W-%Y")" >> $GITHUB_OUTPUT
-        shell: bash
 
       - name: Run tests
         # working-directory: /tmp
