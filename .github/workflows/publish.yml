@@ -3,7 +3,7 @@ name: Build and publish package
 on:
   pull_request:
   release:
-    # Only trigger on GitHub Releases - but include "pre-relesae" if that box is ticked
+    # Only trigger on GitHub Releases - but include "pre-release" if that box is ticked
     types:
       - released
       - prereleased
