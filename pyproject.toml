@@ -21,6 +21,10 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
 ]
 dynamic = [ "version" ]
+optional-dependencies.test = [
+  "pytest",
+  "pytest-cov",
+]
 
 [tool.setuptools]
 packages.find = {}
